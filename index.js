@@ -20,6 +20,7 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
+//tell me when im logging in
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -31,7 +32,8 @@ client.on('interactionCreate', async interaction => {
 	const command = client.commands.get(interaction.commandName);
 
 	if (!command) return;
-
+  
+  //use command code from commands folder on interaction
 	try {
 		await command.execute(interaction);
 	} catch (error) {
