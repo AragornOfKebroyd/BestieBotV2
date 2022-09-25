@@ -8,22 +8,31 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 //.commands can be accesed from any script
 client.commands = new Collection();
-//path of commands dir
+//commands
 const commandsPath = path.join(__dirname, 'commands');
-//only register js files
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 //add commands to list
 for (const file of commandFiles) {
-  const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	client.commands.set(command.data.name, command);
-}
+	const filePath = path.join(commandsPath, file);
+	  const command = require(filePath);
+	  client.commands.set(command.data.name, command);
+  }
+  
+//events
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
-//tell me when im logging in
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
+//starts all event listeners
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
+	}
+}
 
 //on interaction with bot
 client.on('interactionCreate', async interaction => {
