@@ -1,24 +1,42 @@
-const { Client, GatewayIntentBits } = require('discord.js');
+const fs = require('node:fs');
+const path = require('node:path');
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { token } = require('./config.json');
 
+//requirements for what the bot can access, its intents
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+//.commands can be accesed from any script
+client.commands = new Collection();
+//path of commands dir
+const commandsPath = path.join(__dirname, 'commands');
+//only register js files
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+//add commands to list
+for (const file of commandFiles) {
+  const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	client.commands.set(command.data.name, command);
+}
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-//where application command code goes for now
+//on interaction with bot
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isChatInputCommand()) return;
+  
+	const command = client.commands.get(interaction.commandName);
 
-	const { commandName } = interaction;
+	if (!command) return;
 
-	if (commandName === 'ping') {
-		await interaction.reply('Pong!');
-	} else if (commandName === 'server') {
-		await interaction.reply('Server info.');
-	} else if (commandName === 'user') {
-		await interaction.reply('User info.');
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
 
