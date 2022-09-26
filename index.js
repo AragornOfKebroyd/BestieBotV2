@@ -4,7 +4,11 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { token } = require('./config.json');
 
 //requirements for what the bot can access, its intents
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [
+	GatewayIntentBits.Guilds, 
+	GatewayIntentBits.DirectMessages, 
+	GatewayIntentBits.GuildMessages] 
+});
 
 //.commands can be accesed from any script
 client.commands = new Collection();
