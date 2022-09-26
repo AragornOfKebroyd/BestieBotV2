@@ -7,8 +7,9 @@ const { token } = require('./config.json');
 const client = new Client({ intents: [
 	GatewayIntentBits.Guilds, 
 	GatewayIntentBits.DirectMessages, 
-	GatewayIntentBits.GuildMessages] 
-});
+	GatewayIntentBits.GuildMessages,
+	GatewayIntentBits.MessageContent
+]});
 
 //.commands can be accesed from any script
 client.commands = new Collection();
