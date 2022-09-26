@@ -5,6 +5,6 @@ module.exports = {
 		.setName('userinfo')
 		.setDescription('User Info!'),
 	async execute(interaction) {
-		await interaction.reply('idk!');
+		await interaction.reply(`Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`);
 	},
 };
