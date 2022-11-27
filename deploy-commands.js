@@ -1,3 +1,5 @@
+//Only run manually to update commands to the bot
+
 const fs = require('node:fs');
 const path = require('node:path');
 const { REST } = require('@discordjs/rest');

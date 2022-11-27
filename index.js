@@ -13,6 +13,7 @@ const client = new Client({ intents: [
 
 //.commands can be accesed from any script
 client.commands = new Collection();
+
 //commands
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
@@ -33,10 +34,24 @@ for (const file of eventFiles) {
 	const filePath = path.join(eventsPath, file);
 	const event = require(filePath);
 	if (event.once) {
+		//event.name is the name of the event stored in each file, and event.execute is the function within the event files
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {
+		//For multiple events on, for single events once (like ready)
 		client.on(event.name, (...args) => event.execute(...args));
 	}
+}
+
+//cron jobs
+const cronJobPath = path.join(__dirname, 'cronjobs');
+const cronJobFiles = fs.readdirSync(cronJobPath).filter(file => file.endsWith('.js'));
+
+//Starts all cron jobs
+for (const file of cronJobFiles) {
+	const filePath = path.join(cronJobPath, file);
+	const cronJob = require(filePath);
+	//run initialise function of all cron jobs
+	cronJob.cronInit()
 }
 
 //on interaction with bot
