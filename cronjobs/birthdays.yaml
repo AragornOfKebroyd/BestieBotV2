@@ -1,20 +1,29 @@
 ---
 #remeber not to use tabs, you need to use 2 spaces for indentation
 
-
 mailingrecipients:
   AragornOfKebroyd:
     id: "619826088788623361"
-    preferences: ["onday","daybefore","weekbefore"]
+    preferences: ["daybefore","weekbefore"]
   Danny4:
-    id: "593434664140537857"
+    #temporarily my id so i dont annoy danny, dannys id: 593434664140537857
+    id: "619826088788623361"
     preferences: ["onday", "daybefore", "weekbefore"]
-
 
 birthdays:
   Ben:
     date: "2005/12/02"
     subscribers: ["AragornOfKebroyd","Danny4"]
+    daysuntill: 4
   Danny:
     date: "2005/09/15"
     subscribers: ["AragornOfKebroyd","Danny4"]
+    daysuntill: 291
+  TestWeek:
+    date: "2006/12/05"
+  TestTmrw:
+    date: "2002/11/29"
+  TestToday:
+    date: "2007/11/28"
+  TestToday2:
+    date: "2004/11/28"

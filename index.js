@@ -3,6 +3,10 @@ const path = require('node:path');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { token } = require('./config.json');
 
+//functions that can be called from other scripts
+module.exports = {DirectMessage}
+
+
 //requirements for what the bot can access, its intents
 const client = new Client({ intents: [
 	GatewayIntentBits.Guilds, 
@@ -70,5 +74,13 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
+
+//called from outside scripts
+function DirectMessage(id,message) {
+	client.users.fetch(id, false).then((user) => {
+		user.send(message);
+	});
+}
+
 
 client.login(token);
