@@ -16,14 +16,12 @@ module.exports = {
 }
 
 
-
 function main() {
     yml = readYaml()
     daysUntillBdaysList = daysUntillBirthdays(yml)
     messagestuff = calculateMailingList(daysUntillBdaysList)
-    messagePeople(yml)
+    messagePeople(yml,messagestuff)
 }
-
 
 
 function readYaml() {
@@ -33,7 +31,6 @@ function readYaml() {
     //console.log(yamlFile)
     return yamlFile
 }
-
 
 
 function daysUntillBirthdays(yamlFile) {
@@ -62,7 +59,6 @@ function daysUntillBirthdays(yamlFile) {
 }
 
 
-
 function calculateMailingList(Bdays) {
     seven = []
     one = []
@@ -88,12 +84,33 @@ function calculateMailingList(Bdays) {
 }
 
 
-
-function messagePeople(yamlFile) {
+function messagePeople(yamlFile, birthdays) {
     for (const [username, data] of Object.entries(yamlFile.mailingrecipients)) {
         id = data["id"]
         preferences = data["preferences"]
-        console.log(id, preferences)
-        index.DirectMessage(`hello, it is ${username} here, here is a gamer :)`)
+        //in 1 week
+        if (birthdays[0] != []) {
+            if (preferences.includes("weekbefore")) {
+                for (birthday of Object.entries(birthdays[0])) {
+                    index.DirectMessage(id, `it is ${birthday[1]}s birthday in 1 week`)
+                }
+            }
+        }
+        //tomorrow
+        if (birthdays[1] != []) {
+            if (preferences.includes("daybefore")) {
+                for (birthday of Object.entries(birthdays[1])) {
+                    index.DirectMessage(id, `it is ${birthday[1]}s birthday tomorrow`)
+                }
+            }
+        }
+        //today
+        if (birthdays[2] != []) {
+            if (preferences.includes("onday")) {
+                for (birthday of Object.entries(birthdays[2])) {
+                    index.DirectMessage(id, `it is ${birthday[1]}s birthday today!`)
+                }
+            }
+        }
     }
 }

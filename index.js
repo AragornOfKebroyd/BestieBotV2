@@ -77,10 +77,13 @@ client.on('interactionCreate', async interaction => {
 
 //called from outside scripts
 function DirectMessage(id,message) {
+	//not sure why i need to login again but it works lmao
+	client.login(token)
+	//send message to the user
 	client.users.fetch(id, false).then((user) => {
-		user.send(message);
-	});
+		user.send(message)
+	})
 }
 
 
-client.login(token);
+client.login(token)

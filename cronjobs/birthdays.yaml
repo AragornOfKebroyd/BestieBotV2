@@ -4,11 +4,11 @@
 mailingrecipients:
   AragornOfKebroyd:
     id: "619826088788623361"
-    preferences: ["daybefore","weekbefore"]
+    preferences: ["onday","daybefore","weekbefore"]
   Danny4:
-    #temporarily my id so i dont annoy danny, dannys id: 593434664140537857
+    #temporarily 0 so i dont annoy danny, dannys id: 593434664140537857
     id: "619826088788623361"
-    preferences: ["onday", "daybefore", "weekbefore"]
+    preferences: []
 
 birthdays:
   Ben:
