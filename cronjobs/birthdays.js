@@ -7,7 +7,6 @@ const index = require(path.join(__dirname, "..", "/index.js"))
 
 module.exports = {
     cronInit() {
-        main()
         //Runs at 7am each morning
         cron.schedule('0 7 * * *', function() {
             main()
@@ -85,6 +84,7 @@ function calculateMailingList(Bdays) {
 
 
 function messagePeople(yamlFile, birthdays) {
+    //go through all mailing recipients and check their preferences and then send the messages
     for (const [username, data] of Object.entries(yamlFile.mailingrecipients)) {
         id = data["id"]
         preferences = data["preferences"]
