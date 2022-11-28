@@ -6,7 +6,6 @@ mailingrecipients:
     id: "619826088788623361"
     preferences: ["onday","daybefore","weekbefore"]
   Danny4:
-    #temporarily 0 so i dont annoy danny, dannys id: 593434664140537857
     id: "619826088788623361"
     preferences: []
 
@@ -20,10 +19,8 @@ birthdays:
     subscribers: ["AragornOfKebroyd","Danny4"]
     daysuntill: 291
   TestWeek:
-    date: "2006/12/05"
-  TestTmrw:
-    date: "2002/11/29"
+    date: "2006/12/06"
+  TestTomorrow:
+    date: "2002/11/30"
   TestToday:
-    date: "2007/11/28"
-  TestToday2:
-    date: "2004/11/28"
+    date: "2007/11/29"
