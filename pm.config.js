@@ -10,23 +10,15 @@ module.exports = {
       watch: true
     }
   ],
-
-  gitclone : {
-    
-  }
-  /*
   deploy : {
     production : {
-      //actually no clue, this was just generated
-      user : 'ubuntu',
-      host : "192.168.0.15",
+      user : 'node',
+      host : '212.83.163.175',
       ref  : 'origin/main',
-      repo : 'https://github.com/AragornOfKebroyd/BestieBotV2',
-      path : 'DESTINATION_PATH',
-      'pre-deploy-local': '',
-      'post-deploy' : 'npm install && pm2 startOrRestart pm.config.js',
-      'pre-setup': ''
+      repo : 'git@github.com:repo.git',
+      fetch: 'all',
+      path : '/ubuntu',
+      'post-deploy' : 'npm install && pm2 reload pm.config.js'
     }
   }
-  */
 };
