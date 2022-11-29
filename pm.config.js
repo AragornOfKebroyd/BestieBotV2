@@ -12,7 +12,7 @@ module.exports = {
   ],
   deploy : {
     production : {
-      user : 'node',
+      user : 'ubuntu',
       host : '212.83.163.175',
       ref  : 'origin/main',
       repo : 'git@github.com:repo.git',
