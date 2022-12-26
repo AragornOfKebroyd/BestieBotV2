@@ -20,7 +20,7 @@ module.exports = {
       ref  : 'origin/main',
       repo : 'https://github.com/AragornOfKebroyd/BestieBotV2',
       fetch: 'all',
-      path : '/home/ubuntu',
+      path : '.',
       'post-deploy' : 'npm install && pm2 reload pm.config.js'
     }
   }*/

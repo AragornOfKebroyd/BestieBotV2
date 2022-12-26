@@ -11,7 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^3.2.4",
     "discord.js": "^14.5.0",
+    "ikea-availability-checker": "^2.0.0-alpha.6",
     "js-yaml": "^4.1.0",
     "node-cron": "^3.0.0"
   }

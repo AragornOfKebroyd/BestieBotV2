@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,19 +8,19 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('preferences')
-                .setDescription('When do you want to get birthday reminders and who for')
+                .setDescription('When do you want to get birthday reminders and who for.')
                 .addStringOption(option =>
                     option.setName('category')
-                        .setDescription('choice')
+                        .setDescription('People: Enable and disable reminders for people, Frequency: How often do you want to be reminded')
                         .setRequired(true)
                         .addChoices(
                             { name: 'People', value: 'peeps' },
-                            { name: 'Remeinders', value: 'rems' })))
+                            { name: 'Frequency', value: 'rems' })))
 
         .addSubcommand(subcommand =>
             subcommand
-                .setName('user')
-                .setDescription('d'))
+                .setName('set')
+                .setDescription('Set a birthday for a person'))
 
         .addSubcommand(subcommand =>
             subcommand
@@ -35,6 +35,13 @@ module.exports = {
                 ,
 	async execute(interaction) {
         console.log(interaction)
-		await interaction.reply('go away nerd');
+        const row = new ActionRowBuilder()
+			.addComponents(
+				new ButtonBuilder()
+					.setCustomId('primary')
+					.setLabel('Click me!')
+					.setStyle(ButtonStyle.Primary),
+			);
+        await interaction.reply({ content: 'I think you should,', components: [row] });
 	},
 };
