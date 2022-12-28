@@ -14,11 +14,17 @@ module.exports = {
     }
 }
 
-
 function main() {
+    //read in config file
     yml = readYaml()
+
+    //calcs the days untill everyones birthday returned as an dict
     daysUntillBdaysList = daysUntillBirthdays(yml)
+
+    //array of 3 arrays, people with birthdays in 7 days, one day and today
     messagestuff = calculateMailingList(daysUntillBdaysList)
+
+    //procedure to message people with this info
     messagePeople(yml,messagestuff)
 }
 
@@ -58,10 +64,8 @@ function daysUntillBirthdays(yamlFile) {
 }
 
 
-function calculateMailingList(Bdays) {
-    seven = []
-    one = []
-    today = []
+function calculateMailingList(Bdays){
+    seven = []; one = []; today = [];
     for (const [person, bdaydays] of Object.entries(Bdays)) {
         switch (bdaydays) {
             case (7):{

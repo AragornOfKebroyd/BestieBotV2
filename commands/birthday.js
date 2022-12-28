@@ -4,7 +4,6 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bday')
 		.setDescription('help command')
-
         .addSubcommand(subcommand =>
             subcommand
                 .setName('preferences')
@@ -30,7 +29,6 @@ module.exports = {
             subcommand
                 .setName('unmute')
                 .setDescription('f'))
-    
                 ,
 	async execute(interaction) {
         console.log(interaction)

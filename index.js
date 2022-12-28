@@ -37,11 +37,11 @@ const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'
 for (const file of eventFiles) {
 	const filePath = path.join(eventsPath, file);
 	const event = require(filePath);
+	//For multiple events on, for single events once (like ready)
 	if (event.once) {
 		//event.name is the name of the event stored in each file, and event.execute is the function within the event files
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {
-		//For multiple events on, for single events once (like ready)
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
@@ -58,23 +58,6 @@ for (const file of cronJobFiles) {
 	cronJob.cronInit()
 }
 
-//on interaction with bot
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isChatInputCommand()) return;
-  
-	const command = client.commands.get(interaction.commandName);
-
-	if (!command) return;
-  
-  //use command code from commands folder on interaction
-	try {
-		await command.execute(interaction);
-	} catch (error) {
-		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-	}
-});
-
 //called from outside scripts
 function DirectMessage(id,message) {
 	//not sure why i need to login again but it works lmao
@@ -84,6 +67,5 @@ function DirectMessage(id,message) {
 		user.send(message)
 	})
 }
-
 
 client.login(token)

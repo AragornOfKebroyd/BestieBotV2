@@ -19,8 +19,8 @@ birthdays:
     subscribers: ["AragornOfKebroyd","Danny4"]
     daysuntill: Null
   TestWeek:
-    date: "2006/01/03"
+    date: "2006/01/04"
   TestTomorrow:
-    date: "2002/12/14"
+    date: "2002/12/29"
   TestToday:
-    date: "2007/12/13"
+    date: "2007/12/28"

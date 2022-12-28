@@ -1,6 +1,14 @@
+const { Events } = require('discord.js');
+
 module.exports = {
-	name: 'messageCreate',
+	name: Events.messageCreate,
 	execute(message) {
-		console.log(`message sent ${message.content}`);
+		main(message)
 	},
 };
+
+
+function main(){
+	console.log(`message sent ${message.content}`);
+}
+
