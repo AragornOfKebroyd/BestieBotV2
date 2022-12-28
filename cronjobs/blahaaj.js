@@ -23,13 +23,14 @@ async function checkAvailability(storeID,productID) {
         answer = `${result.store.name} Ikea has ${result.stock} blahaaj in stock!`
         return answer
     }
+    return "hello"
 }
 
 async function main(){
     len = cities.length
     for (let i = 0; i < len; i++){
         result = await checkAvailability(cities[i],blahaaj)
-        index.DirectMessage(casper,result)
+        //index.DirectMessage(casper,result)
         index.DirectMessage("619826088788623361",result)
     }
 }

@@ -11,7 +11,6 @@ module.exports = {
                 .setDescription('When do you want to get birthday reminders and who for.')
                 .addStringOption(option =>
                     option.setName('category')
-                        .setDescription('People: Enable and disable reminders for people, Frequency: How often do you want to be reminded')
                         .setRequired(true)
                         .addChoices(
                             { name: 'People', value: 'peeps' },
