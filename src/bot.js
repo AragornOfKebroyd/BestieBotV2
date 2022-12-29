@@ -6,11 +6,13 @@ const { token, testingtoken, mongoDBtoken } = require('../config.json');
 module.exports = {DirectMessage}
 
 //requirements for what the bot can access, its intents
+const { Guilds, GuildMessages, GuildMessageReactions, DirectMessages, MessageContent } = GatewayIntentBits
 const client = new Client({ intents: [
-	GatewayIntentBits.Guilds, 
-	GatewayIntentBits.DirectMessages, 
-	GatewayIntentBits.GuildMessages,
-	GatewayIntentBits.MessageContent
+	Guilds, 
+	DirectMessages, 
+	GuildMessageReactions, 
+	GuildMessages, 
+	MessageContent
 ]});
 
 //.commands can be accesed from any script
