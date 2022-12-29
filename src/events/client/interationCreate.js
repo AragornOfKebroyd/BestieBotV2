@@ -36,9 +36,24 @@ module.exports = {
 
 			if (!button) return new Error("there is no code for this button")
 
-			//run the buttonId button code
+			//run the button code
 			try {
 				await button.execute(interaction, client);
+			}//if it errors
+			catch (error) {
+				console.error(error)
+			}
+		}//menu
+		else if (interaction.isSelectMenu()){
+			const { selectMenus } = client;
+			const { customId} = interaction;
+			const menu = selectMenus.get(customId);
+
+			if (!menu) return new Error("there is no code for this select menu")
+
+			//run the menu code
+			try {
+				await menu.execute(interaction, client);
 			}//if it errors
 			catch (error) {
 				console.error(error)
