@@ -1,12 +1,13 @@
+const { InteractionType } = require('discord.js')
+
 module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction, client) {
 		//commands
-		if (interaction.isChatInputCommand()){
+		if (interaction.type == InteractionType.ApplicationCommand){
 			//get command
 			const { commands } = client
 			const { commandName } = interaction
-			console.log(commandName)
 			const command = commands.get(commandName);
 			
 			//if no command
@@ -54,6 +55,36 @@ module.exports = {
 			//run the menu code
 			try {
 				await menu.execute(interaction, client);
+			}//if it errors
+			catch (error) {
+				console.error(error)
+			}
+		}//modals (little popup boxes to fill in text)
+		else if (interaction.type == InteractionType.ModalSubmit){
+			const { modals } = client
+			const { customId} = interaction;
+			const modal = modals.get(customId);
+
+			if (!modal) return new Error("there is no code for this select modal")
+			
+			//run the modal code
+			try {
+				await modal.execute(interaction, client);
+			}//if it errors
+			catch (error) {
+				console.error(error)
+			}
+		}//context menu apps
+		else if (interaction.isContextMenuCommand()){
+			const { commands } = client
+			const { customId} = interaction;
+			const contextCommand = commands.get(customId);
+
+			if (!contextCommand) return new Error("there is no code for this context command")
+			
+			//run the command code
+			try {
+				await contextCommand.execute(interaction, client);
 			}//if it errors
 			catch (error) {
 				console.error(error)

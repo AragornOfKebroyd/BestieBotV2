@@ -20,6 +20,8 @@ client.commandArray = [];
 //components
 client.buttons = new Collection();
 client.selectMenus = new Collection();
+client.modals = new Collection();
+
 //colour to reference in embeds
 client.colour = "0x7b42f5";
 

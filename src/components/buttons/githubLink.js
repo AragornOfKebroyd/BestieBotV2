@@ -4,7 +4,8 @@ module.exports = {
     },
     async execute(interaction, client) {
         await interaction.reply({
-            content: 'https://github.com/AragornOfKebroyd'
+            content: 'https://github.com/AragornOfKebroyd',
+            ephemeral: true
         });
     }
 }
