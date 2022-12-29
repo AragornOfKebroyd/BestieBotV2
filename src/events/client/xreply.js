@@ -34,6 +34,7 @@ function determineX(userMessage){
 	for (codePoint of userMessage) {
 		userMessageArray.push(String.fromCodePoint(codePoint.codePointAt(0)));
 	}
+	//console.log(userMessageArray)//debugging
 	//itterate through string
 	for (charInd = 0; charInd < userMessageArray.length; charInd++){
 		char = userMessageArray[charInd]

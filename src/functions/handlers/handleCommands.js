@@ -18,7 +18,7 @@ module.exports = (client) => {
                 //add all commands
                 commands.set(command.data.name, command);
                 commandArray.push(command.data.toJSON());
-                console.log(`Command: ${command.data.name} has passed through the handler`)
+                //console.log(`Command: ${command.data.name} has passed through the handler`)//debugging
 	        }
         }
         //add slash commands to the bot

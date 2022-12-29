@@ -15,7 +15,13 @@ const client = new Client({ intents: [
 
 //.commands can be accesed from any script
 client.commands = new Collection();
-client.commandArray = []
+client.commandArray = [];
+
+//components
+client.buttons = new Collection();
+
+//colour to reference in embeds
+client.colour = "0x7b42f5";
 
 //functions
 const functionsFolders = fs.readdirSync("./src/functions")
@@ -26,6 +32,7 @@ for (const folder of functionsFolders){
 	}
 }
 
+//needs changing, but im not sure how yet, pretty jank
 //called from outside scripts
 function DirectMessage(id,message) {
 	//not sure why i need to login again but it works lmao
@@ -40,6 +47,7 @@ function DirectMessage(id,message) {
 client.handleCommands();
 client.handleEvents();
 client.handleCronjobs();
+client.handleComponents();
 
 //login to discord bot
 client.login(token);
