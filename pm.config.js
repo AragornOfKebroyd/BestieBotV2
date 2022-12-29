@@ -2,14 +2,9 @@ module.exports = {
   //scripts that can be run from the terminal
   apps : [
     {
-      name:"index",
-      script: 'node \"index.js\"', //main file
+      name:"bot",
+      script: 'node \"src/bot.js\"', //main file
       watch: true //any changes will cause a restart
-    }, 
-    {
-      name:"deploy",
-      script: 'node \"deploy-commands.js\"', //upload new commands
-      watch: true
     }
   ],/*
   deploy : {

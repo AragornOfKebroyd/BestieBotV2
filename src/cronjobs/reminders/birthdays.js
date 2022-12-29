@@ -2,7 +2,7 @@ const cron = require('node-cron')
 const yaml = require('js-yaml');
 const path = require('node:path');
 const fs = require('node:fs');
-const index = require(path.join(__dirname, "..", "/index.js"))
+const index = require("../../bot.js")
 
 
 module.exports = {

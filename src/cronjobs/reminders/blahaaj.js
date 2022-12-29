@@ -1,8 +1,7 @@
 //requirements
 const cron = require('node-cron')
 const checker = require('ikea-availability-checker');
-const path = require('node:path');
-const index = require(path.join(__dirname, "..", "/index.js"))
+const index = require("../../bot.js")
 //specifics
 const casper = "591984877927399425"
 const ben = "619826088788623361"

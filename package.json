@@ -2,10 +2,10 @@
   "name": "bestiebotv2",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node src/bot.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
     "discord.js": "^14.5.0",
     "ikea-availability-checker": "^2.0.0-alpha.6",
     "js-yaml": "^4.1.0",
+    "mongoose": "^6.8.2",
     "node-cron": "^3.0.0"
   }
 }

@@ -4,6 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bday')
 		.setDescription('help command')
+        /* Add subcommand stopped it from working - work out later
         .addSubcommand(subcommand =>
             subcommand
                 .setName('preferences')
@@ -29,8 +30,9 @@ module.exports = {
             subcommand
                 .setName('unmute')
                 .setDescription('f'))
-                ,
-	async execute(interaction) {
+        */
+        ,
+	async execute(interaction, client) {
         console.log(interaction)
         const row = new ActionRowBuilder()
 			.addComponents(
