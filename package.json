@@ -2,10 +2,10 @@
   "name": "bestiebotv2",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src/bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/bot.js"
+    "start": "node ."
   },
   "keywords": [],
   "author": "",
