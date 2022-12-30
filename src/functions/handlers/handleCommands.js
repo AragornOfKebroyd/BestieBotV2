@@ -2,6 +2,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord.js');
 const fs = require('fs');
 const { token, clientId, guildId } = require("../../../config.json")
+const chalk = require('chalk');
 
 module.exports = (client) => {
     client.handleCommands = async() => {
@@ -24,7 +25,7 @@ module.exports = (client) => {
         //add slash commands to the bot
         const rest = new REST({ version: '10' }).setToken(token);
         try {
-            console.log("Started refreshing application (/) commands.")
+            console.log(chalk.cyan("Started refreshing application (/) commands."))
             await rest.put(Routes.applicationGuildCommands(clientId, guildId), { 
                 body: client.commandArray
             });
@@ -33,7 +34,7 @@ module.exports = (client) => {
                 body: commandArray 
             });
             */
-            console.log("Succesfully reloaded application (/) commands.")
+            console.log(chalk.green("Succesfully reloaded application (/) commands."))
         } 
         catch (error) {
             console.error(error)

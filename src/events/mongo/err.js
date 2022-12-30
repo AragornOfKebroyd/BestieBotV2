@@ -1,7 +1,8 @@
-//this is not needed but i will do in future, need to watch video series to set everything up properly:
-//Discord.JS v14 Fusion Terror
+const chalk = require('chalk');
+
 module.exports = {
 	name: 'error',
-	execute(message) {
+	execute(error) {
+		console.log(chalk.red(`An error has occured with the database connection:\n${error}`))
 	},
 };

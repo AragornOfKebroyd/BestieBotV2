@@ -47,7 +47,7 @@ module.exports = {
 		}//menu
 		else if (interaction.isStringSelectMenu()){
 			const { selectMenus } = client;
-			const { customId} = interaction;
+			const { customId } = interaction;
 			const menu = selectMenus.get(customId);
 
 			if (!menu) return new Error("there is no code for this select menu")
@@ -62,7 +62,7 @@ module.exports = {
 		}//modals (little popup boxes to fill in text)
 		else if (interaction.type == InteractionType.ModalSubmit){
 			const { modals } = client
-			const { customId} = interaction;
+			const { customId } = interaction;
 			const modal = modals.get(customId);
 
 			if (!modal) return new Error("there is no code for this select modal")
@@ -77,7 +77,7 @@ module.exports = {
 		}//context menu apps
 		else if (interaction.isContextMenuCommand()){
 			const { commands } = client
-			const { customId} = interaction;
+			const { customId } = interaction;
 			const contextCommand = commands.get(customId);
 
 			if (!contextCommand) return new Error("there is no code for this context command")
@@ -88,6 +88,29 @@ module.exports = {
 			}//if it errors
 			catch (error) {
 				console.error(error)
+			}
+		}//autocomplete commands
+		else if (interaction.type == InteractionType.ApplicationCommandAutocomplete){
+			const { commands } = client
+			const { commandName } = interaction
+			const command = commands.get(commandName);
+			
+			//if no command
+			if (!command) {
+				console.error(`No command matching ${interaction.commandName} was found.`);
+				return;
+			}
+			//try to execute the command
+			try {
+				await command.autocomplete(interaction, client)
+			}//if it errors
+			catch (error) {
+				console.error(`Error executing ${interaction.commandName}`);
+				console.error(error);
+				await interaction.reply({
+					content: "Something went wrong while executing this command...",
+					ephemeral: true
+				})
 			}
 		}
 	},
