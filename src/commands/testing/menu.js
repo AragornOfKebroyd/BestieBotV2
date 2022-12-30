@@ -5,6 +5,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('menu')
 		.setDescription('choose your favourite number (1-5)!'),
+        
 	async execute(interaction, client) {
         const menu = new ActionRowBuilder().addComponents(new StringSelectMenuBuilder()
             .setCustomId('testMenu')

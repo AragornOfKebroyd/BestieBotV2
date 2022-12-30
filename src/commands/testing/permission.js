@@ -5,6 +5,7 @@ module.exports = {
 		.setName('permission')
 		.setDescription('requires permission to get rid of a role and then get a new one')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+        
 	async execute(interaction, client) {
         //roles of the person who ran the command
         const { roles } = interaction.member;

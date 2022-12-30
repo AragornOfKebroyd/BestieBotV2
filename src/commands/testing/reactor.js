@@ -4,6 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('reactor')
 		.setDescription('You can click on some thingys'),
+        
 	async execute(interaction, client) {
         const message = await interaction.reply({
             content: 'React to this! no way:',

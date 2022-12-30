@@ -4,6 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('modal')
 		.setDescription('idrk tbh'),
+        
 	async execute(interaction, client) {
         const modal = new ModalBuilder()
             .setCustomId('testModal')

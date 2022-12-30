@@ -4,13 +4,11 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('autocomplete')
 		.setDescription('Autocomplete, idk')
-        .addStringOption(option => 
-            option
-                .setName('colour')
-                .setDescription('a colour based on autocomplete.')
-                .setAutocomplete(true)
-                .setRequired(true)
-        ),
+        .addStringOption(option => option
+            .setName('colour')
+            .setDescription('a colour based on autocomplete.')
+            .setAutocomplete(true)
+            .setRequired(true)),
     
     async autocomplete(interaction, client){
         const focusedValue = interaction.options.getFocused();

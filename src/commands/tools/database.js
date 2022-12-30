@@ -7,16 +7,15 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('database')
 		.setDescription('Returns info from database')
-        .addStringOption(option =>
-            option
-                .setName('operation')
-                .setDescription('AAAAAAAAA')
-                .setRequired(true)
-                .addChoices(
-                    { name: 'Add', value: 'add' },
-                    { name: 'View', value: 'view' },
-                    { name: 'Delete', value: 'delete' },
-                )),
+        .addStringOption(option => option
+            .setName('operation')
+            .setDescription('AAAAAAAAA')
+            .setRequired(true)
+            .addChoices(
+                { name: 'Add', value: 'add' },
+                { name: 'View', value: 'view' },
+                { name: 'Delete', value: 'delete' })),
+                
 	async execute(interaction, client) {
         const option = interaction.options.getString('operation');
         switch (option) {
