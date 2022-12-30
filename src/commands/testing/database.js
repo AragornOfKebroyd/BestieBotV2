@@ -1,6 +1,7 @@
 const Guild = require('../../schemas/guild');
 const mongoose = require('mongoose')
 const { SlashCommandBuilder } = require('discord.js');
+const chalk = require('chalk')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -9,6 +10,7 @@ module.exports = {
         .addStringOption(option =>
             option
                 .setName('operation')
+                .setDescription('AAAAAAAAA')
                 .setRequired(true)
                 .addChoices(
                     { name: 'Add', value: 'add' },
@@ -31,8 +33,10 @@ module.exports = {
                 break;
         }
 	},
+    AddDatabaseReord,
+    ViewDataBaseRecord,
+    DeleteDataBaseRecord
 };
-
 async function AddDatabaseReord(interaction){
     let guildProfile = await Guild.findOne({ guildId: interaction.guild.id })
     if (!guildProfile){
@@ -46,13 +50,13 @@ async function AddDatabaseReord(interaction){
         await guildProfile.save().catch(console.error)
         //send message to server
         await interaction.reply({
-            content: `Server: **${guildProfile.guildName}** has now been added to the database.`
+            content: `Server: **${interaction.guild.name}** has now been added to the database.`
         })
-        console.log(chalk.blue(`[Database] Server: '${guildProfile.guildName}' Added to guild DB.`))
+        console.log(chalk.blue(`[Database]: Server: '${interaction.guild.name}' Added to guild DB.`))
     }//if it exists
     else{
         await interaction.reply({
-            content: `Server: **${guildProfile.guildName}** is allready in database.`
+            content: `Server: **${interaction.guild.name}** is allready in database.`
         })
     }
 }
@@ -61,7 +65,7 @@ async function ViewDataBaseRecord(interaction){
     let guildProfile = await Guild.findOne({ guildId: interaction.guild.id })
     if (!guildProfile){
         await interaction.reply({
-            content: `Server: **${guildProfile.guildName}** is not in database.`
+            content: `Server: **${interaction.guild.name}** is not in database.`
         })
     }//if it exists
     else{
@@ -75,13 +79,22 @@ async function DeleteDataBaseRecord(interaction){
     let guildProfile = await Guild.findOne({ guildId: interaction.guild.id })
     if (!guildProfile){
         await interaction.reply({
-            content: `Server: **${guildProfile.guildName}** is not in database.`
+            content: `Server: **${interaction.guild.name}** is not in database.`
         })
     }//if it exists
     else{
-        await Guild.deleteOne({ _id: interaction.guild.id }).catch(console.error)
-        await interaction.reply({
-            content: `Server Name: **${guildProfile.guildName}** deleted from database.`
-        })
+        try {
+            await Guild.deleteOne({ guildId: interaction.guild.id })
+            await interaction.reply({
+                content: `Server Name: **${interaction.guild.name}** deleted from database.`
+            })
+            console.log(chalk.yellow(`[Database]:  Server: '${interaction.guild.name}' Removed from guild DB.`))
+        } catch (error) {
+            await interaction.reply({
+                content: `Something went wrong when trying to delete **${interaction.guild.name}** from the database.`
+            })
+            console.log(chalk.red(`[Database]: Error: deleting ${interaction.guild.name} from the database`))
+            console.error(error)
+        }      
     }
 }

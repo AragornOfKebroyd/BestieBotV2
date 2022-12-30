@@ -5,7 +5,6 @@ module.exports = {
 		.setName('ping')
 		.setDescription('What is your ping?'),
 	async execute(interaction, client) {
-
 		//defer reply to something we will do afterwards
 		const message = await interaction.deferReply({
 			fetchReply: true

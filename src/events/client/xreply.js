@@ -64,7 +64,6 @@ function determineX(userMessage){
 			}
 			while (accepetedX.includes(userMessageArray[afterind]) == true){
 				afterind++
-				console.log(afterind,userMessageArray.length)
 				if (afterind == userMessageArray.length){
 					endflag = true
 					break
