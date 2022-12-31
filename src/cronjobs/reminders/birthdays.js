@@ -2,19 +2,18 @@ const cron = require('node-cron')
 const yaml = require('js-yaml');
 const path = require('node:path');
 const fs = require('node:fs');
-const index = require("../../bot.js")
 
 
 module.exports = {
-    cronInit() {
+    cronInit(client) {
         //Runs at 7am each morning
         cron.schedule('0 7 * * *', function() {
-            main()
+            main(client)
         });
     }
 }
 
-function main() {
+function main(client) {
     //read in config file
     yml = readYaml()
 
@@ -25,7 +24,7 @@ function main() {
     messagestuff = calculateMailingList(daysUntillBdaysList)
 
     //procedure to message people with this info
-    messagePeople(yml,messagestuff)
+    messagePeople(yml,messagestuff,client)
 }
 
 
@@ -87,7 +86,7 @@ function calculateMailingList(Bdays){
 }
 
 
-function messagePeople(yamlFile, birthdays) {
+function messagePeople(yamlFile, birthdays,client) {
     //go through all mailing recipients and check their preferences and then send the messages
     for (const [username, data] of Object.entries(yamlFile.mailingrecipients)) {
         id = data["id"]
@@ -96,7 +95,9 @@ function messagePeople(yamlFile, birthdays) {
         if (birthdays[0] != []) {
             if (preferences.includes("weekbefore")) {
                 for (birthday of Object.entries(birthdays[0])) {
-                    index.DirectMessage(id, `it is ${birthday[1]}s birthday in 1 week`)
+                    client.users.fetch(id, false).then((user) => {
+                        user.send(`it is ${birthday[1]}s birthday in 1 week`)
+                    })
                 }
             }
         }
@@ -104,7 +105,9 @@ function messagePeople(yamlFile, birthdays) {
         if (birthdays[1] != []) {
             if (preferences.includes("daybefore")) {
                 for (birthday of Object.entries(birthdays[1])) {
-                    index.DirectMessage(id, `it is ${birthday[1]}s birthday tomorrow`)
+                    client.users.fetch(id, false).then((user) => {
+                        user.send(`it is ${birthday[1]}s birthday tomorrow`)
+                    })
                 }
             }
         }
@@ -112,7 +115,9 @@ function messagePeople(yamlFile, birthdays) {
         if (birthdays[2] != []) {
             if (preferences.includes("onday")) {
                 for (birthday of Object.entries(birthdays[2])) {
-                    index.DirectMessage(id, `it is ${birthday[1]}s birthday today!`)
+                    client.users.fetch(id, false).then((user) => {
+                        user.send(`it is ${birthday[1]}s birthday today!`)
+                    })
                 }
             }
         }
