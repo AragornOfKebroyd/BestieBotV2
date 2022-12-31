@@ -38,17 +38,6 @@ for (const folder of functionsFolders){
 	}
 }
 
-//needs changing, but im not sure how yet, pretty jank
-//called from outside scripts
-function DirectMessage(id,message) {
-	//not sure why i need to login again but it works lmao
-	client.login(token)
-	//send message to the user
-	client.users.fetch(id, false).then((user) => {
-		user.send(message)
-	})
-}
-
 //run handlers
 client.handleCommands();
 client.handleEvents();

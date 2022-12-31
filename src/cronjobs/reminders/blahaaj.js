@@ -1,7 +1,7 @@
 //requirements
 const cron = require('node-cron')
 const checker = require('ikea-availability-checker');
-const index = require("../../bot.js")
+
 //specifics
 const casper = "591984877927399425"
 const ben = "619826088788623361"
@@ -10,10 +10,10 @@ const leeds = '261'; const manchester = '186'; const sheffield = '519';
 const cities = [leeds, manchester, sheffield];
 
 module.exports = {
-    cronInit() {
+    cronInit(client) {
         //Runs every 5 mins
         cron.schedule('*/5 * * * *', function() {
-            main()
+            main(client)
         });
     }
 }
@@ -30,14 +30,18 @@ async function checkAvailability(storeID,productID) {
     return answer;
 }
 
-async function main(){
+async function main(client){
     //itterate through all the cities in the list to check for availability
     for (let i = 0; i < cities.length; i++){
         result = await checkAvailability(cities[i],blahaj)
         if (result == "NA"){
             continue
         }
-        index.DirectMessage(casper,result)
-        index.DirectMessage(ben,result)
+        client.users.fetch(casper, false).then((user) => {
+            user.send(result)
+        })
+        client.users.fetch(ben, false).then((user) => {
+            user.send(result)
+        })
     }
 }

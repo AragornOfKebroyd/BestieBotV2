@@ -1,15 +1,16 @@
 const { Schema, model } = require('mongoose')
 
-const guildSchema = new Schema({
+const subscriptionSchema = new Schema({
     _id: Schema.Types.ObjectId,
     Username: String,
-    DiscordID: Int16Array,
+    DiscordID: String,
     RemindersArray: Array,
     ThisMonthReminder: Boolean,
     WeekBeforeReminder: Boolean,
     DayBeforeReminder: Boolean,
-    OnDayReminder: Boolean
+    OnDayReminder: Boolean,
+    Muted: Boolean
 });
 
 //model('name of model', schema, 'collection to save to')
-module.exports = model('User', guildSchema, 'subscriptions');
+module.exports = model('User', subscriptionSchema, 'subscriptions');

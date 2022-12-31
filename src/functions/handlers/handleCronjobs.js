@@ -12,7 +12,7 @@ module.exports = (client) => {
 	        for (const file of cronjobsFiles){
                 const cronjob = require(`../../cronjobs/${folder}/${file}`)
                 //start all cronjobs
-                cronjob.cronInit()
+                cronjob.cronInit(client)
 	        }
         }
     }
