@@ -4,9 +4,6 @@ const { token, testingtoken, mongoDBtoken } = require('../config.json');
 const mongoose = require("mongoose"); const { connect } = require('mongoose')
 mongoose.set('strictQuery', false);
 
-//functions that can be called from other scripts
-module.exports = {DirectMessage}
-
 //requirements for what the bot can access, its intents
 const { Guilds, GuildMessages, GuildMessageReactions, DirectMessages, MessageContent,  } = GatewayIntentBits
 const client = new Client({ intents: [
