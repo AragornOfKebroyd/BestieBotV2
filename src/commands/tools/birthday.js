@@ -261,7 +261,7 @@ async function buildEmbedsandButtons(interaction, client){
         
             currentactionrow.addComponents(currentbutton)
             //if the action row is full
-            if (currentactionrow.components.length == 4){
+            if (currentactionrow.components.length == 3){
                 currentpage.push(currentactionrow)
                 currentactionrow = new ActionRowBuilder()
             }
