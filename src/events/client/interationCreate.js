@@ -29,11 +29,25 @@ module.exports = {
 			}
 		}//buttons
 		else if (interaction.isButton()) {
-
+			
 			//get the button of the interactionId of the button
 			const { buttons } = client
 			const { customId } = interaction
-			const button = buttons.get(customId)
+			
+			//special case for birthday as there are as many ids as there are people in the bdays db
+			if (customId.includes('BIRTHDAY')){
+				var button = buttons.get('birthdayToggle')
+				const person = customId.replace('BIRTHDAY','')
+				try {
+					await button.execute(interaction, client, person);
+				}//if it errors
+				catch (error) {
+					console.error(error)
+				}
+				return
+			}
+
+			var button = buttons.get(customId)
 
 			if (!button) return new Error("there is no code for this button")
 
