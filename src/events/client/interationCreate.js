@@ -36,10 +36,10 @@ module.exports = {
 			
 			//special case for birthday as there are as many ids as there are people in the bdays db
 			if (customId.includes('BIRTHDAY')){
-				var button = buttons.get('birthdayToggle')
-				const person = customId.replace('BIRTHDAY','')
+				const brokenDown = customId.split(':')
+				var button = buttons.get(brokenDown[2])
 				try {
-					await button.execute(interaction, client, person);
+					await button.execute(interaction, client, customId);
 				}//if it errors
 				catch (error) {
 					console.error(error)

@@ -208,14 +208,13 @@ async function buildEmbedsandButtons(interaction, client){
     //get the reminders list of the person using the command
     subscriptionList = await Subscription.find({ DiscordID: interaction.user.id }).select({ RemindersArray : 1, _id : 0})
     reminders = subscriptionList[0].RemindersArray
-    console.log(reminders)
     //array of pages
     embedarray = []
     buttonPages = []
     //itterate through all the pages
     for (i = 0; i < numOfPages; i++){
         //an embed for each page
-        var currentembed = new EmbedBuilder()
+        let currentembed = new EmbedBuilder()
             .setTitle(`Birthday Reminders ${i+1}/${numOfPages}`)
             .setDescription('Select who you do and dont want to be reminded about when it is near or on their birthday')
             .setColor(client.colour)
@@ -248,17 +247,17 @@ async function buildEmbedsandButtons(interaction, client){
             //buttons, need to add seeing if they are in your subscription list, then doing success / danger depening on whether they are
             if (reminders.includes(person._id)){
                 var currentbutton = new ButtonBuilder()
-                    .setCustomId(`BIRTHDAY${person._id}`)
+                    //information that is passed to be buttons has to be done here, special handeler in interactionCreate for BIRTHDAY
+                    .setCustomId(`BIRTHDAY:default:birthdayToggle:${i}:${person._id}`)
                     .setLabel(`${person.Name}`)
                     .setStyle(ButtonStyle.Success)
             } else {
                 var currentbutton = new ButtonBuilder()
-                    .setCustomId(`BIRTHDAY${person._id}`)
+                    .setCustomId(`BIRTHDAY:default:birthdayToggle:${i}:${person._id}`)
                     .setLabel(`${person.Name}`)
                     .setStyle(ButtonStyle.Danger)
             }
             
-        
             currentactionrow.addComponents(currentbutton)
             //if the action row is full
             if (currentactionrow.components.length == 3){
@@ -299,7 +298,10 @@ async function preferencesPeople(interaction, client){
     
 
     //reply message creation
+    /*
     [embedarray, buttonPages] = await buildEmbedsandButtons(interaction, client)
+    nextbutton = new ButtonBuilder().setCustomId('BIRTHDAY:0:nextButtonBday:0').setLabel("next").setStyle(ButtonStyle.Primary)
+    buttonPages[0].push(new ActionRowBuilder().addComponents(nextbutton))
     var message = await interaction.reply({
         content:`Birthdays`,
         ephemeral: false,
@@ -307,7 +309,15 @@ async function preferencesPeople(interaction, client){
         components: buttonPages[0],
         fetchReply: true
     })
+    */
+    const { buttons } = client
+    var button = buttons.get('ButtonBday')
+	
+    //code is in a button file so it can be executed when pressing nav buttons
+	await button.execute(interaction, client, 'BIRTHDAY:initiate:ButtonBday:0');
 
+
+    /*
     //changes when you change page
     var currentPage = 0
 
@@ -321,7 +331,8 @@ async function preferencesPeople(interaction, client){
     const filter = (reaction, user) => {
         return ['◀️', '🛑', '▶️'].includes(reaction.emoji.name) && user.id === interaction.user.id //whoever sent the command will only be able to return true from this function
     }
-
+    
+    
     const collector = message.createReactionCollector({ filter })
 
     //when reaction is clicked
@@ -352,15 +363,16 @@ async function preferencesPeople(interaction, client){
             message.reactions.removeAll()
         }        
     })
+    */
 }
 
-async function leftMenu(sentMessage, embedarray, currentPage){
+
+async function leftMenu(message, embedarray, currentPage){
     if (currentPage > 0){
-        await sentMessage.edit({
+        await message.edit({
             embeds: [embedarray[currentPage-1]],
             components: buttonPages[currentPage-1],
-            fetchReply: true,
-            ephemerel: true
+            fetchReply: true
         })
         currentPage = currentPage - 1
         return currentPage
@@ -368,21 +380,18 @@ async function leftMenu(sentMessage, embedarray, currentPage){
     return currentPage
 }
 
-async function rightMenu(sentMessage, embedarray, currentPage){
+async function rightMenu(message, embedarray, currentPage){
     if (currentPage < embedarray.length-1){
-        await sentMessage.edit({
+        await interaction.message.edit({
             embeds: [embedarray[currentPage+1]],
             components: buttonPages[currentPage+1],
-            fetchReply: true,
-            ephemerel: true
+            fetchReply: true
         })
         currentPage = currentPage + 1
         return currentPage
     }
     return currentPage
 }
-
-
 
 async function preferencesReminders(interaction, client){
     //embed with buttons
@@ -395,7 +404,7 @@ async function addBirthday(interaction, client, name, day, month, username, priv
         if (result[0].Username != 'None'){
             await interaction.reply({
                 content: `The name ${name} Is allready in the database, their username is ${result[0].Username} and their birthday is stored as the ${result[0].Date}\nIf this is not who you are trying to add, sorry, add a second name or use a variation of the name.`
-            })   
+            })
         }else{
             await interaction.reply({
                 content: `The name ${name} Is allready in the database, their birthday is stored as ${result[0].Date}.\nIf this is not who you are trying to add, sorry, add a second name or use a variation of the name.`
