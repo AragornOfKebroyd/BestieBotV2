@@ -9,12 +9,10 @@ module.exports = {
     },
     async execute(interaction, client, customId) {
         const person = customId.split(':')[4]
-        console.log(person)
         //get current reminders
         subscriptionList = await Subscription.find({ DiscordID: interaction.user.id }).select({ Username: 1, RemindersArray : 1, _id : 0})
         reminders = subscriptionList[0].RemindersArray
         username = subscriptionList[0].Username
-        console.log(reminders)
 
         // Change the style of received button component
         newmessage = interaction.message
@@ -25,10 +23,8 @@ module.exports = {
                     style = button.data.style
                     if (style == 3){
                         button.data.style = 4
-                        console.log("uwu")
                     } else {
                         button.data.style = 3
-                        console.log("owo")
                     }
                     
                     //replace
@@ -52,7 +48,6 @@ module.exports = {
             }
         }
         // Respond to the interaction
-        console.log("one small step for cheesekind")
         interaction.update({
             text:'no way',
             components: newmessage.components 

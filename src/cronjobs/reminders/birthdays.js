@@ -7,9 +7,10 @@ const fs = require('node:fs');
 module.exports = {
     cronInit(client) {
         //Runs at 7am each morning
+        /*  // depreciated
         cron.schedule('0 7 * * *', function() {
             main(client)
-        });
+        });*/
     }
 }
 

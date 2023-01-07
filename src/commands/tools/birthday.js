@@ -117,7 +117,9 @@ module.exports = {
     async autocomplete(interaction, client){
         const focusedValue = interaction.options.getFocused();
         choices = []
-        users = await Birthday.find({}).select({ Name: 1, CreatedByDiscordId:1, Username:1, _id: 0 });
+        privates = await Birthday.find({ Publicity: 'private', CreatedByDiscordId: interaction.user.id }).select({ Name: 1, CreatedByDiscordId:1, Username:1, _id: 0 })
+        publics = await Birthday.find({ Publicity: 'public' }).select({Name: 1, CreatedByDiscordId:1, Username:1, _id: 0 })
+        users = privates.concat(publics)
         if (interaction.options.getSubcommand() == 'delete'){
             for (user of users){
                 choiseName = user.Name
@@ -140,9 +142,9 @@ module.exports = {
             }
         }
         
-        const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+        const filtered = choices.filter(choice => choice.replace(/[^\x00-\x7F]/g,"").startsWith(focusedValue));
         await interaction.respond(
-            filtered.map(choice => ({ name: choice, value: choice })),
+            filtered.map(choice => ({ name: choice, value: choice })).slice(0, 25),
         );
     },
 
@@ -167,10 +169,50 @@ module.exports = {
                 addBirthday(interaction, client, addname, day, month, username, privacy)
                 break;
             case 'mute':
-                //should be as simple as getting and then saving from the db
+                //does as the name suggests
+                checkAndCreateSubProfileIfNotHasOne(interaction)
+
+                //get muted attribute
+                result = await Subscription.find({DiscordID : interaction.user.id}).select({ Muted: 1, _id: 0 })
+                isMuted = result[0].Muted
+                if (isMuted == true){
+                    await interaction.reply({
+                        content:`Birthday reminders are allready muted.`,
+                        ephemerel: true
+                    })
+                } else{
+                    //update db
+                    Subscription.findOneAndUpdate({ DiscordID : interaction.user.id }, { Muted: true }, function(err,res){
+                        if (err) return console.error(err)
+                    })
+                    await interaction.reply({
+                        content:`Birthday reminders muted.`,
+                        ephemerel: true
+                    })
+                }
                 break;
             case 'unmute':
-                //should be as simple as getting and then saving from the db
+                //does as the name suggests
+                checkAndCreateSubProfileIfNotHasOne(interaction)
+
+                //get muted attribute
+                result = await Subscription.find({DiscordID : interaction.user.id}).select({ Muted: 1, _id: 0 })
+                isMuted = result[0].Muted
+                if (isMuted == false){
+                    await interaction.reply({
+                        content:`Birthday reminders are allready unmuted.`,
+                        ephemerel: true
+                    })
+                } else{
+                    //update db
+                    Subscription.findOneAndUpdate({ DiscordID : interaction.user.id }, { Muted: false }, function(err,res){
+                        if (err) return console.error(err)
+                    })
+                    await interaction.reply({
+                        content:`Birthday reminders unmuted.`,
+                        ephemerel: true
+                    })
+                }
                 break;
             case 'delete':
                 const deletename = interaction.options.getString('name').replace(/[^\x00-\x7F]/g,"");//get rid of circle and all other unicdoe
@@ -195,84 +237,8 @@ module.exports = {
     deleteBirthday,
     editBirthday
 };
-
-/*
-so:
-get all users from the birthdays database
-
-*/
-async function buildEmbedsandButtons(interaction, client){
-    //calculate the number of pages needed
-    result = await Birthday.find().select({ _id: 1, Name: 1, Date:1 })
-    numOfPages = Math.ceil(result.length / 12)
-    //get the reminders list of the person using the command
-    subscriptionList = await Subscription.find({ DiscordID: interaction.user.id }).select({ RemindersArray : 1, _id : 0})
-    reminders = subscriptionList[0].RemindersArray
-    //array of pages
-    embedarray = []
-    buttonPages = []
-    //itterate through all the pages
-    for (i = 0; i < numOfPages; i++){
-        //an embed for each page
-        let currentembed = new EmbedBuilder()
-            .setTitle(`Birthday Reminders ${i+1}/${numOfPages}`)
-            .setDescription('Select who you do and dont want to be reminded about when it is near or on their birthday')
-            .setColor(client.colour)
-            .setThumbnail(`https://e7.pngegg.com/pngimages/199/741/png-clipart-party-popper-cartoon-illustration-party-popper-emoji-confetti-kids-bubble-fitness-app-holidays-text.png`)
-            .setTimestamp(Date.now())
-            .setFooter({
-                iconURL: client.user.displayAvatarURL(),
-                text: client.user.tag,
-            })
-        var currentpage = []
-        currentactionrow = new ActionRowBuilder()
-        //itterate through people on each page
-        for (j = 12*i; j < 12*i+12; j++){
-            var person = result[j]
-            //if it is more than there are
-            if (j > result.length - 1){
-                //push the current action row
-                if (currentactionrow.components.length > 0){
-                    currentpage.push(currentactionrow)
-                }
-                break
-            }
-            //add info for embeds
-            currentembed.addFields({
-                name: `${person.Name}`,
-                value:`${person.Date}`,
-                inline:true
-            })
-
-            //buttons, need to add seeing if they are in your subscription list, then doing success / danger depening on whether they are
-            if (reminders.includes(person._id)){
-                var currentbutton = new ButtonBuilder()
-                    //information that is passed to be buttons has to be done here, special handeler in interactionCreate for BIRTHDAY
-                    .setCustomId(`BIRTHDAY:default:birthdayToggle:${i}:${person._id}`)
-                    .setLabel(`${person.Name}`)
-                    .setStyle(ButtonStyle.Success)
-            } else {
-                var currentbutton = new ButtonBuilder()
-                    .setCustomId(`BIRTHDAY:default:birthdayToggle:${i}:${person._id}`)
-                    .setLabel(`${person.Name}`)
-                    .setStyle(ButtonStyle.Danger)
-            }
-            
-            currentactionrow.addComponents(currentbutton)
-            //if the action row is full
-            if (currentactionrow.components.length == 3){
-                currentpage.push(currentactionrow)
-                currentactionrow = new ActionRowBuilder()
-            }
-        }
-        embedarray.push(currentembed)
-        buttonPages.push(currentpage)
-    }
-    return [embedarray, buttonPages]
-}
-
-async function preferencesPeople(interaction, client){
-    //first check if the user has a thing in the database
+async function checkAndCreateSubProfileIfNotHasOne(interaction){
+   //first check if the user has a thing in the database
     result = await Subscription.find({ DiscordID:interaction.user.id })
 
     //if not create one for them
@@ -294,103 +260,15 @@ async function preferencesPeople(interaction, client){
         await newSubscription.save().catch(console.error)
         
         console.log(chalk.blue(`[Database]: User: ${username} has been added to the subscriptions colleciton`))
-    }
-    
+    } 
+}
 
-    //reply message creation
-    /*
-    [embedarray, buttonPages] = await buildEmbedsandButtons(interaction, client)
-    nextbutton = new ButtonBuilder().setCustomId('BIRTHDAY:0:nextButtonBday:0').setLabel("next").setStyle(ButtonStyle.Primary)
-    buttonPages[0].push(new ActionRowBuilder().addComponents(nextbutton))
-    var message = await interaction.reply({
-        content:`Birthdays`,
-        ephemeral: false,
-        embeds: [embedarray[0]],
-        components: buttonPages[0],
-        fetchReply: true
-    })
-    */
-    const { buttons } = client
-    var button = buttons.get('ButtonBday')
-	
+
+async function preferencesPeople(interaction, client){
+    //does as the name suggests
+    checkAndCreateSubProfileIfNotHasOne(interaction)
     //code is in a button file so it can be executed when pressing nav buttons
-	await button.execute(interaction, client, 'BIRTHDAY:initiate:ButtonBday:0');
-
-
-    /*
-    //changes when you change page
-    var currentPage = 0
-
-    //react with emojis
-    const emojis = ['◀️', '🛑', '▶️']
-    for (emoji of emojis){
-        message.react(emoji)
-    }
-    
-    //filter and collected to get user input
-    const filter = (reaction, user) => {
-        return ['◀️', '🛑', '▶️'].includes(reaction.emoji.name) && user.id === interaction.user.id //whoever sent the command will only be able to return true from this function
-    }
-    
-    
-    const collector = message.createReactionCollector({ filter })
-
-    //when reaction is clicked
-    collector.on('collect', async (reaction, user) => {
-        //remove the reaction
-        const userReactions = message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
-        try {
-            for (const reaction of userReactions.values()) {
-                await reaction.users.remove(user.id);
-            }
-        } catch (error) {
-            console.error('Failed to remove reactions.');
-        }
-        //do the code
-        if (reaction.emoji.name == '◀️'){
-            currentPage = await leftMenu(message, embedarray, currentPage)
-        } else if (reaction.emoji.name == '▶️'){
-            currentPage = await rightMenu(message, embedarray, currentPage)
-        } else if (reaction.emoji.name == '🛑'){
-            collector.stop('delete')
-        }
-    })
-
-    collector.on('end', (collected, reason) => {
-        if (reason && reason == 'delete'){
-            message.delete()
-        } else {
-            message.reactions.removeAll()
-        }        
-    })
-    */
-}
-
-
-async function leftMenu(message, embedarray, currentPage){
-    if (currentPage > 0){
-        await message.edit({
-            embeds: [embedarray[currentPage-1]],
-            components: buttonPages[currentPage-1],
-            fetchReply: true
-        })
-        currentPage = currentPage - 1
-        return currentPage
-    }
-    return currentPage
-}
-
-async function rightMenu(message, embedarray, currentPage){
-    if (currentPage < embedarray.length-1){
-        await interaction.message.edit({
-            embeds: [embedarray[currentPage+1]],
-            components: buttonPages[currentPage+1],
-            fetchReply: true
-        })
-        currentPage = currentPage + 1
-        return currentPage
-    }
-    return currentPage
+	await client.buttons.get('ButtonBday').execute(interaction, client, 'BIRTHDAY:initiate:ButtonBday:0');
 }
 
 async function preferencesReminders(interaction, client){
@@ -401,16 +279,16 @@ async function addBirthday(interaction, client, name, day, month, username, priv
     //check if anyone with the same name is allready in the colleciton
     result = await Birthday.find({ Name:name })
     if (result.length > 0){
-        if (result[0].Username != 'None'){
+        //if it is not a private name that is being duped, there can be multiple private things with the same name
+        boolPrivate = result[0].privacy == 'private'
+        boolMadeByThisPerson = result[0].CreatedByDiscordId == interaction.user.id
+        if (boolPrivate == true && boolMadeByThisPerson == false){
             await interaction.reply({
-                content: `The name ${name} Is allready in the database, their username is ${result[0].Username} and their birthday is stored as the ${result[0].Date}\nIf this is not who you are trying to add, sorry, add a second name or use a variation of the name.`
+                content: `The name ${name} Is allready in the database, their birthday is stored as ${result[0].Date}.\nIf this is not who you are trying to add, sorry, add a second name or use a variation of the name.`,
+                ephemerel: true
             })
-        }else{
-            await interaction.reply({
-                content: `The name ${name} Is allready in the database, their birthday is stored as ${result[0].Date}.\nIf this is not who you are trying to add, sorry, add a second name or use a variation of the name.`
-            })
+            return
         }
-        return;
     }
 
     //make a date, day is a number 1 to 31, month is a number 1 to 12
@@ -438,10 +316,13 @@ async function addBirthday(interaction, client, name, day, month, username, priv
 
 async function deleteBirthday(interaction, client, name){
     //get name
-    result = await Birthday.find({ Name:name }).select({ Name: 1, CreatedByDiscordId:1, Username:1, _id: 0 })
+    public = await Birthday.find({ Name:name, Publicity:'public' }).select({ Name: 1, CreatedByDiscordId:1, Username:1, _id: 0 })
+    private = await Birthday.find({ Name:name, Publicity:'private', CreatedByDiscordId:interaction.user.id }).select({ Name: 1, CreatedByDiscordId:1, Username:1, _id: 0 })
+    result = public.concat(private)
     if (result.length == 0){
         await interaction.reply({
-            content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`
+            content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`,
+            ephemerel: true
         })
         return
     }
@@ -452,7 +333,8 @@ async function deleteBirthday(interaction, client, name){
     //If there is nobody in the database with that name
     if (!deleteUser){
         await interaction.reply({
-            content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`
+            content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`,
+            ephemerel: true
         })
         return;
     }
@@ -460,7 +342,8 @@ async function deleteBirthday(interaction, client, name){
     //If you are admin (or me) you can bypass the check to see if you made the member
     if (CreatedById != interaction.user.id && !interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers) && interaction.user.tag != Username){ //&& !message.user.id == '619826088788623361'
         await interaction.reply({
-            content: `You cannot delete ${name} as you did not add them, you can ask an admin.`
+            content: `You cannot delete ${name} as you did not add them, you can ask an admin.`,
+            ephemerel: true
         })
         return;
     }
@@ -468,7 +351,8 @@ async function deleteBirthday(interaction, client, name){
     try {
         await Birthday.deleteOne({ Name: name })
         await interaction.reply({
-            content: `${name} was removed from the birthday reminders list.`
+            content: `${name} was removed from the birthday reminders list.`,
+            ephemerel: true
         })
     } catch (error) {
         console.error(error)
@@ -480,16 +364,20 @@ async function deleteBirthday(interaction, client, name){
 
 async function editBirthday(interaction, client, name, newname, newday, newmonth, newusername, newprivacy){
     //check if a user exists
-    result = await Birthday.find({ Name : name })
+    public = await Birthday.find({ Name:name, Publicity:'public' })
+    private = await Birthday.find({ Name:name, Publicity:'private', CreatedByDiscordId:interaction.user.id })
+    result = public.concat(private)
     if (result.length == 0){
         await interaction.reply({
-            content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`
+            content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`,
+            ephemerel: true
         })
         return
     }
     if (newname == 'Dont Change' && newusername == 'Dont Change' && newday == 'Dont Change' && newmonth == 'Dont Change' && newprivacy == 'Dont Change'){
         await interaction.reply({
-            content: `there is inputed nothing to change`
+            content: `there is inputed nothing to change`,
+            ephemerel: true
         })
         return
     }
@@ -515,12 +403,14 @@ async function editBirthday(interaction, client, name, newname, newday, newmonth
         })
         console.log(chalk.blue(`[Database]: ${name} Updated in birthday collection.`))
         await interaction.reply({
-            content: `Succesfully updated ${name} in the birthday reminder list, new details:\nName: ${newname}\nBirthday: ${newdate}\nPrivacy: ${newprivacy}\nUsername: ${newusername}`
+            content: `Succesfully updated ${name} in the birthday reminder list, new details:\nName: ${newname}\nBirthday: ${newdate}\nPrivacy: ${newprivacy}\nUsername: ${newusername}`,
+            ephemerel: true
         })
     } catch (error) {
         console.log(chalk.red(`[Database]: ${name} Failed to update in birthday collection.`))
         await interaction.reply({
-            content: `something went wrong when trying to update ${name}`
+            content: `something went wrong when trying to update ${name}`,
+            ephemerel: true
         })
     }   
 }

@@ -21,8 +21,11 @@ module.exports = {
             replyflag = false
         }
         
+        
+        privates = await Birthday.find({ Publicity: 'private', CreatedByDiscordId: interaction.user.id }).select({ _id: 1, Name: 1, Date:1 })
+        publics = await Birthday.find({ Publicity: 'public' }).select({ _id: 1, Name: 1, Date:1 })
+        result = privates.concat(publics)
         //calculate the number of pages needed
-        result = await Birthday.find().select({ _id: 1, Name: 1, Date:1 })
         numOfPages = Math.ceil(result.length / 12)
 
         //get the reminders list of the person using the command
@@ -121,74 +124,3 @@ module.exports = {
         }
     }
 }
-/*
-async function buildEmbedsandButtons(interaction, client){
-    //calculate the number of pages needed
-    result = await Birthday.find().select({ _id: 1, Name: 1, Date:1 })
-    numOfPages = Math.ceil(result.length / 12)
-    //get the reminders list of the person using the command
-    subscriptionList = await Subscription.find({ DiscordID: interaction.user.id }).select({ RemindersArray : 1, _id : 0})
-    reminders = subscriptionList[0].RemindersArray
-    //array of pages
-    embedarray = []
-    buttonPages = []
-    //itterate through all the pages
-    for (i = 0; i < numOfPages; i++){
-        //an embed for each page
-        let currentembed = new EmbedBuilder()
-            .setTitle(`Birthday Reminders ${i+1}/${numOfPages}`)
-            .setDescription('Select who you do and dont want to be reminded about when it is near or on their birthday')
-            .setColor(client.colour)
-            .setThumbnail(`https://e7.pngegg.com/pngimages/199/741/png-clipart-party-popper-cartoon-illustration-party-popper-emoji-confetti-kids-bubble-fitness-app-holidays-text.png`)
-            .setTimestamp(Date.now())
-            .setFooter({
-                iconURL: client.user.displayAvatarURL(),
-                text: client.user.tag,
-            })
-        var currentpage = []
-        currentactionrow = new ActionRowBuilder()
-        //itterate through people on each page
-        for (j = 12*i; j < 12*i+12; j++){
-            var person = result[j]
-            //if it is more than there are
-            if (j > result.length - 1){
-                //push the current action row
-                if (currentactionrow.components.length > 0){
-                    currentpage.push(currentactionrow)
-                }
-                break
-            }
-            //add info for embeds
-            currentembed.addFields({
-                name: `${person.Name}`,
-                value:`${person.Date}`,
-                inline:true
-            })
-
-            //buttons, need to add seeing if they are in your subscription list, then doing success / danger depening on whether they are
-            if (reminders.includes(person._id)){
-                var currentbutton = new ButtonBuilder()
-                    //information that is passed to be buttons has to be done here, special handeler in interactionCreate for BIRTHDAY
-                    .setCustomId(`BIRTHDAY:birthdayToggle:${i}:${person._id}`)
-                    .setLabel(`${person.Name}`)
-                    .setStyle(ButtonStyle.Success)
-            } else {
-                var currentbutton = new ButtonBuilder()
-                    .setCustomId(`BIRTHDAY:birthdayToggle:${i}:${person._id}`)
-                    .setLabel(`${person.Name}`)
-                    .setStyle(ButtonStyle.Danger)
-            }
-            
-            currentactionrow.addComponents(currentbutton)
-            //if the action row is full
-            if (currentactionrow.components.length == 3){
-                currentpage.push(currentactionrow)
-                currentactionrow = new ActionRowBuilder()
-            }
-        }
-        embedarray.push(currentembed)
-        buttonPages.push(currentpage)
-    }
-    return [embedarray, buttonPages]
-}
-*/

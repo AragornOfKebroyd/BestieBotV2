@@ -1,29 +1,68 @@
+const { mongoose } = require('mongoose')
 const cron = require('node-cron')
-const fs = require('node:fs');
-const mongoose = require('mongoose')
+const fs = require('node:fs')
 const Birthday = require('../../schemas/birthdays')
+const Subscription = require('../../schemas/subscriptions')
 
 module.exports = {
     cronInit(client) {
-        main()
+        //main(client)//for testing purposes
         //Runs at 7am each morning
         cron.schedule('0 7 * * *', function() {
             main(client)
         });
     }
 }
-/*
-Calculate the date at which is 7 days from now, one day from now and today
-*/
 
 async function main(client){
     var [todaydate, tomorrowDate, weekDate] = datesCalc()
     BirthdayToday = await Birthday.find({ Date:todaydate }).select({ _id: 1, Name: 1 })
     BirthdayTomorrow = await Birthday.find({ Date:tomorrowDate }).select({ _id: 1, Name: 1 })
     BirthdayInWeek = await Birthday.find({ Date:weekDate }).select({ _id: 1, Name: 1 })
+    //Month function not working yet, do later
+    //console message to say a message has been sent
+    for (bday of BirthdayToday){
+        const [ _id, Name ] = [`${bday._id}`, bday.Name]
+        mailingList = await Subscription.find({ RemindersArray: { $all : [_id] }})
+        for (person of mailingList){
+            const { OnDayReminder, Muted } = person
+            if (OnDayReminder == false || Muted == true){
+                return
+            }
+            await client.users.fetch(person.DiscordID, false).then((user) => {
+                user.send(`bonjour me matey, how r u, anyways its ${Name}'s birthday today!, isnt that great`)
+            })
+        }
+    }
+    for (bday of BirthdayTomorrow){
+        const [ _id, Name ] = [`${bday._id}`, bday.Name]
+        mailingList = await Subscription.find({ RemindersArray: { $all : [_id] }})
+        for (person of mailingList){
+            const { DayBeforeReminder, Muted } = person
+            if (DayBeforeReminder == false || Muted == true){
+                return
+            }
+            await client.users.fetch(person.DiscordID, false).then((user) => {
+                user.send(`bonjour me matey, how r u, anyways its ${Name}'s birthday tommorow!, look forward to it`)
+            })
+        }
+    }
+    for (bday of BirthdayInWeek){
+        const [ _id, Name ] = [`${bday._id}`, bday.Name]
+        mailingList = await Subscription.find({ RemindersArray: { $all : [_id] }})
+        for (person of mailingList){
+            const { WeekBeforeReminder, Muted } = person
+            if (WeekBeforeReminder == false || Muted == true){
+                return
+            }
+            await client.users.fetch(person.DiscordID, false).then((user) => {
+                user.send(`bonjour me matey, how r u, anyways its ${Name}'s birthday in 1 week!, get prepared`)
+            })
+        }
+    }
 }
 
-
+//Calculate the date at which is 7 days from now, one day from now and today
 function datesCalc(){
     //set the date today and set time to 7:00am
     today = new Date()

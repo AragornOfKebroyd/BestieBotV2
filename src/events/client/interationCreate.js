@@ -120,11 +120,7 @@ module.exports = {
 			}//if it errors
 			catch (error) {
 				console.error(`Error executing ${interaction.commandName}`);
-				console.error(error);
-				await interaction.reply({
-					content: "Something went wrong while executing this command...",
-					ephemeral: true
-				})
+				console.error(error)
 			}
 		}
 	},
