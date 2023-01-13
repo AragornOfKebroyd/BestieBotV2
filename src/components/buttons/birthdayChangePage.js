@@ -20,8 +20,7 @@ module.exports = {
             page = page - 1
             replyflag = false
         }
-        
-        
+
         privates = await Birthday.find({ Publicity: 'private', CreatedByDiscordId: interaction.user.id }).select({ _id: 1, Name: 1, Date:1 })
         publics = await Birthday.find({ Publicity: 'public' }).select({ _id: 1, Name: 1, Date:1 })
         result = privates.concat(publics)
@@ -108,7 +107,7 @@ module.exports = {
             }
         }
         if (replyflag == true){
-            interaction.reply({
+            await interaction.reply({
                 content:"Birthdays",
                 ephemeral: true,
                 embeds: [currentembed],
@@ -116,7 +115,7 @@ module.exports = {
                 fetchReply: true
             })
         } else{
-            interaction.update({
+            await interaction.update({
                 content:"i dont belive it no butter",
                 embeds: [currentembed],
                 components: currentpage 

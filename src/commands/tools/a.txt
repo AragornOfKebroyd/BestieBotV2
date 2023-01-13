@@ -1,0 +1,97 @@
+
+//for the /birthday preferences frequency command
+async function frequencyProcedure(interaction, client, customId){
+    
+    //get db results
+
+    if (command == 'initiate'){
+        result = await Subscription.find({DiscordID: interaction.user.id})
+        
+        replyflag = true
+    } //On Day
+    else if (command == 'OnDay'){
+        result = await Subscription.find({DiscordID: interaction.user.id}, {OnDayReminder: 1, _id:0})
+        Updatevalue = !(result[0].OnDayReminder)
+        Subscription.findOneAndUpdate({ DiscordID: interaction.user.id }, { OnDayReminder: Updatevalue }, async function(err,res){
+            if (err) {
+                console.error(err)
+                console.log(chalk.red(`[Database]: ${interaction.user.id} Failed to update in birthday collection.`))
+                await interaction.reply({
+                    content: `something went wrong when trying to update ${interaction.user.id}`,
+                    ephemerel: true
+                })
+                return
+            }
+        })
+        if (Updatevalue) Ondaybutton.setStyle(ButtonStyle.Success); else Ondaybutton.setStyle(ButtonStyle.Danger)
+        console.log(chalk.blue(`[Database]: ${interaction.user.id} Updated in birthday collection.`))        
+        replyflag = false
+    } //Day Before
+    else if (command == 'DayBefore'){
+        result = await Subscription.find({DiscordID: interaction.user.id}, {Daybeforebutton: 1, _id:0})
+        Updatevalue = !(result[0].Daybeforebutton)
+        Subscription.findOneAndUpdate({ DiscordID: interaction.user.id }, { DayBeforeReminder: Updatevalue }, async function(err,res){
+            if (err) {
+                console.error(err)
+                console.log(chalk.red(`[Database]: ${interaction.user.id} Failed to update in birthday collection.`))
+                await interaction.reply({
+                    content: `something went wrong when trying to update ${interaction.user.id}`,
+                    ephemerel: true
+                })
+                return
+            }
+        })
+        if (Updatevalue) Daybeforebutton.setStyle(ButtonStyle.Success); else Daybeforebutton.setStyle(ButtonStyle.Danger) 
+        console.log(chalk.blue(`[Database]: ${interaction.user.id} Updated in birthday collection.`))        
+        replyflag = false
+    } //Week Before
+    else if (command == 'WeekBefore'){
+        result = await Subscription.find({DiscordID: interaction.user.id}, {WeekBeforeReminder: 1, _id:0})
+        Updatevalue = !(result[0].WeekBeforeReminder)
+        Subscription.findOneAndUpdate({ DiscordID: interaction.user.id }, { WeekBeforeReminder: Updatevalue }, async function(err,res){
+            if (err) {
+                console.error(err)
+                console.log(chalk.red(`[Database]: ${interaction.user.id} Failed to update in birthday collection.`))
+                await interaction.reply({
+                    content: `something went wrong when trying to update ${interaction.user.id}`,
+                    ephemerel: true
+                })
+                return
+            }
+        })
+        if (Updatevalue) Weekbeforebutton.setStyle(ButtonStyle.Success); else Weekbeforebutton.setStyle(ButtonStyle.Danger) 
+        console.log(chalk.blue(`[Database]: ${interaction.user.id} Updated in birthday collection.`))        
+        replyflag = false
+    } //This Month
+    else if (command == 'ThisMonth'){
+        result = await Subscription.find({DiscordID: interaction.user.id}, {ThisMonthReminder: 1, _id:0})
+        Updatevalue = !(result[0].ThisMonthReminder)
+        Subscription.findOneAndUpdate({ DiscordID: interaction.user.id }, { ThisMonthReminder: Updatevalue }, async function(err,res){
+            if (err) {
+                console.error(err)
+                console.log(chalk.red(`[Database]: ${interaction.user.id} Failed to update in birthday collection.`))
+                await interaction.reply({
+                    content: `something went wrong when trying to update ${interaction.user.id}`,
+                    ephemerel: true
+                })
+                return
+            }
+        })
+        if (Updatevalue) Monthbutton.setStyle(ButtonStyle.Success); else Monthbutton.setStyle(ButtonStyle.Danger) 
+        console.log(chalk.blue(`[Database]: ${interaction.user.id} Updated in birthday collection.`))        
+        replyflag = false
+    }
+
+    //put all buttons in action row
+    
+    
+    //edit or make reply depending
+    if (replyflag == true){
+        
+    } else{
+        await interaction.update({
+            components: [buttonRow]
+        })
+    }
+    
+}

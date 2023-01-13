@@ -178,7 +178,7 @@ module.exports = {
                 if (isMuted == true){
                     await interaction.reply({
                         content:`Birthday reminders are allready muted.`,
-                        ephemerel: true
+                        ephemeral: true
                     })
                 } else{
                     //update db
@@ -187,7 +187,7 @@ module.exports = {
                     })
                     await interaction.reply({
                         content:`Birthday reminders muted.`,
-                        ephemerel: true
+                        ephemeral: true
                     })
                 }
                 break;
@@ -201,7 +201,7 @@ module.exports = {
                 if (isMuted == false){
                     await interaction.reply({
                         content:`Birthday reminders are allready unmuted.`,
-                        ephemerel: true
+                        ephemeral: true
                     })
                 } else{
                     //update db
@@ -210,7 +210,7 @@ module.exports = {
                     })
                     await interaction.reply({
                         content:`Birthday reminders unmuted.`,
-                        ephemerel: true
+                        ephemeral: true
                     })
                 }
                 break;
@@ -267,12 +267,71 @@ async function checkAndCreateSubProfileIfNotHasOne(interaction){
 async function preferencesPeople(interaction, client){
     //does as the name suggests
     checkAndCreateSubProfileIfNotHasOne(interaction)
+
     //code is in a button file so it can be executed when pressing nav buttons
 	await client.buttons.get('ButtonBday').execute(interaction, client, 'BIRTHDAY:initiate:ButtonBday:0');
 }
 
 async function preferencesReminders(interaction, client){
-    //embed with buttons
+    //does as the name suggests
+    checkAndCreateSubProfileIfNotHasOne(interaction)
+
+    //make buttons
+    Ondaybutton = new ButtonBuilder().setCustomId('BIRTHDAY:OnDay:birthdayToggle:NA:OnDay').setLabel('On Day')
+    Daybeforebutton = new ButtonBuilder().setCustomId('BIRTHDAY:DayBefore:birthdayToggle:NA:DayBefore').setLabel('Day Before')
+    Weekbeforebutton = new ButtonBuilder().setCustomId('BIRTHDAY:WeekBefore:birthdayToggle:NA:WeekBefore').setLabel('Week Before')
+    Monthbutton = new ButtonBuilder().setCustomId('BIRTHDAY:ThisMonth:birthdayToggle:NA:ThisMonth').setLabel('This Month').setDisabled(true)
+
+    //get db
+    result = await Subscription.find({ DiscordID: interaction.user.id }).select({ _id: 1, OnDayReminder: 1, DayBeforeReminder: 1, WeekBeforeReminder: 1, ThisMonthReminder: 1 })
+
+    //make buttons correct
+    const {OnDayReminder, DayBeforeReminder, WeekBeforeReminder, ThisMonthReminder} = result[0]
+    if (OnDayReminder) Ondaybutton.setStyle(ButtonStyle.Success); else Ondaybutton.setStyle(ButtonStyle.Danger)
+    if (DayBeforeReminder) Daybeforebutton.setStyle(ButtonStyle.Success); else Daybeforebutton.setStyle(ButtonStyle.Danger) 
+    if (WeekBeforeReminder) Weekbeforebutton.setStyle(ButtonStyle.Success); else Weekbeforebutton.setStyle(ButtonStyle.Danger) 
+    if (ThisMonthReminder) Monthbutton.setStyle(ButtonStyle.Success); else Monthbutton.setStyle(ButtonStyle.Danger) 
+
+    //make aciton row
+    buttonRow = new ActionRowBuilder().addComponents(Ondaybutton, Daybeforebutton, Weekbeforebutton, Monthbutton)
+
+    //make embed
+    Embed = new EmbedBuilder()
+        .setTitle('Birthday Frequency Preferences')
+        .setDescription('Pick when you want to be reminded about peoples Birthdays')
+        .setColor(client.colour)
+        //.setImage()
+        .setThumbnail(`https://e7.pngegg.com/pngimages/199/741/png-clipart-party-popper-cartoon-illustration-party-popper-emoji-confetti-kids-bubble-fitness-app-holidays-text.png`)
+        .setTimestamp(Date.now())
+        .setFooter({
+            iconURL: client.user.displayAvatarURL(),
+            text: client.user.tag,
+        })
+        .addFields([
+            {
+                name: 'On Day',
+                value: 'Sends you a message on the day of birthdays you are being notified about.'
+            },
+            {
+                name: 'Day Before',
+                value: 'Sends you a message the day before the birthdays you are being notified about.'
+            },
+            {
+                name: 'Week Before',
+                value: 'Sends you a message before each birthday you are being notified about.'
+            },
+            {
+                name: 'This Month',
+                value: 'Sends you a list of peoples birthday in the month on the 1st of each month. (Not implimented)'
+            }
+        ])
+    await interaction.reply({
+        content:`no way`,
+        ephemeral: true,
+        embeds: [Embed],
+        components: [buttonRow],
+        fetchReply: true
+    })
 }
 
 async function addBirthday(interaction, client, name, day, month, username, privacy){
