@@ -14,7 +14,8 @@ module.exports = {
 		//get latency and ping in message
 		const newMessage = `API Latency: ${client.ws.ping}\nClient Ping: ${message.createdTimestamp - interaction.createdTimestamp}`
 		await interaction.editReply({
-			content: newMessage
+			content: newMessage,
+			ephemeral: true
 		});
 	},
 };

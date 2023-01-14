@@ -344,7 +344,7 @@ async function addBirthday(interaction, client, name, day, month, username, priv
         if (boolPrivate == true && boolMadeByThisPerson == false){
             await interaction.reply({
                 content: `The name ${name} Is allready in the database, their birthday is stored as ${result[0].Date}.\nIf this is not who you are trying to add, sorry, add a second name or use a variation of the name.`,
-                ephemerel: true
+                ephemeral: true
             })
             return
         }
@@ -368,7 +368,7 @@ async function addBirthday(interaction, client, name, day, month, username, priv
     
     await interaction.reply({
         content: `**${name}** has now been added to the birthdays list.`,
-        ephemerel: true
+        ephemeral: true
     })
     console.log(chalk.blue(`[Database]: Person: ${name} has been added to the birthdays colleciton`))
 }
@@ -381,7 +381,7 @@ async function deleteBirthday(interaction, client, name){
     if (result.length == 0){
         await interaction.reply({
             content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`,
-            ephemerel: true
+            ephemeral: true
         })
         return
     }
@@ -393,7 +393,7 @@ async function deleteBirthday(interaction, client, name){
     if (!deleteUser){
         await interaction.reply({
             content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`,
-            ephemerel: true
+            ephemeral: true
         })
         return;
     }
@@ -402,7 +402,7 @@ async function deleteBirthday(interaction, client, name){
     if (CreatedById != interaction.user.id && !interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers) && interaction.user.tag != Username){ //&& !message.user.id == '619826088788623361'
         await interaction.reply({
             content: `You cannot delete ${name} as you did not add them, you can ask an admin.`,
-            ephemerel: true
+            ephemeral: true
         })
         return;
     }
@@ -411,7 +411,7 @@ async function deleteBirthday(interaction, client, name){
         await Birthday.deleteOne({ Name: name })
         await interaction.reply({
             content: `${name} was removed from the birthday reminders list.`,
-            ephemerel: true
+            ephemeral: true
         })
     } catch (error) {
         console.error(error)
@@ -429,14 +429,14 @@ async function editBirthday(interaction, client, name, newname, newday, newmonth
     if (result.length == 0){
         await interaction.reply({
             content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`,
-            ephemerel: true
+            ephemeral: true
         })
         return
     }
     if (newname == 'Dont Change' && newusername == 'Dont Change' && newday == 'Dont Change' && newmonth == 'Dont Change' && newprivacy == 'Dont Change'){
         await interaction.reply({
             content: `there is inputed nothing to change`,
-            ephemerel: true
+            ephemeral: true
         })
         return
     }
@@ -455,21 +455,21 @@ async function editBirthday(interaction, client, name, newname, newday, newmonth
     if (newprivacy == 'Dont Change') newprivacy = result[0].Publicity
 
     //replace
-    try {
-        Birthday.findOneAndUpdate({ Name : name }, { Username : newusername, Name: newname, Date: newdate, Publicity: newprivacy }, function(err,res){
-            if (err) return console.error(err)
+    Birthday.findOneAndUpdate({ Name : name }, { Username : newusername, Name: newname, Date: newdate, Publicity: newprivacy }, async function(err,res){
+        if (err) {
+            console.error(err)
+            console.log(chalk.red(`[Database]: ${name} Failed to update in birthday collection.`))
+            await interaction.reply({
+                content: `something went wrong when trying to update ${name}`,
+                ephemeral: true
+            })
             return
-        })
-        console.log(chalk.blue(`[Database]: ${name} Updated in birthday collection.`))
-        await interaction.reply({
-            content: `Succesfully updated ${name} in the birthday reminder list, new details:\nName: ${newname}\nBirthday: ${newdate}\nPrivacy: ${newprivacy}\nUsername: ${newusername}`,
-            ephemerel: true
-        })
-    } catch (error) {
-        console.log(chalk.red(`[Database]: ${name} Failed to update in birthday collection.`))
-        await interaction.reply({
-            content: `something went wrong when trying to update ${name}`,
-            ephemerel: true
-        })
-    }   
+        } else {
+            console.log(chalk.blue(`[Database]: ${name} Updated in birthday collection.`))
+            await interaction.reply({
+                content: `Succesfully updated ${name} in the birthday reminder list, new details:\nName: ${newname}\nBirthday: ${newdate}\nPrivacy: ${newprivacy}\nUsername: ${newusername}`,
+                ephemeral: true
+            })
+        }
+    })
 }

@@ -43,7 +43,8 @@ async function AddDatabaseReord(interaction){
             _id: mongoose.Types.ObjectId(),
             guildId: interaction.guild.id,
             guildName: interaction.guild.name,
-            guildIcon: interaction.guild.iconURL() ? interaction.guild.iconURL() : "None"
+            guildIcon: interaction.guild.iconURL() ? interaction.guild.iconURL() : "None",
+            Xs: false
         })
         
         await guildProfile.save().catch(console.error)
@@ -69,7 +70,7 @@ async function ViewDataBaseRecord(interaction){
     }//if it exists
     else{
         await interaction.reply({
-            content: `Server Name: **${guildProfile.guildName}**\nServer Id: **${guildProfile.guildId}**\nServer Icon: ${guildProfile.guildIcon}`
+            content: `Server Name: **${guildProfile.guildName}**\nServer Id: **${guildProfile.guildId}**\nServer Icon: ${guildProfile.guildIcon}\nBestieBot Replies To x's: **${guildProfile.Xs}**`
         })
     }
 }

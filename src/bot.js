@@ -26,6 +26,9 @@ client.modals = new Collection();
 //colour to reference in embeds
 client.colour = "0x7b42f5";
 
+//me
+client.Aragorn = '619826088788623361'
+
 //functions
 const functionsFolders = fs.readdirSync("./src/functions")
 for (const folder of functionsFolders){

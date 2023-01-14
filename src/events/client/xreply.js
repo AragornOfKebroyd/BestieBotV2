@@ -1,3 +1,5 @@
+const Guild = require('../../schemas/guild');
+const mongoose = require('mongoose')
 const accepetedX = ['x', 'х', 'ҳ', 'ӽ', 'ᶍ', 'ӿ', 'χ', 'ᕽ', 'ˣ', '×', '╳', '✕', '✖', '⨯', '✗', '✘', '🗴', '🗶', '☒', '🗵', '🗷', '☓', '🞩', '❌', '❎', '⨉', '🗙', '𝄪', 'א', '𝔛', '𝖃', '𝔵', '𝖝', 'ㄨ', 'メ', '乂', '㐅', 'ᚷ', 'ᚸ', 'لا']
 
 /*//look, none of them are the same
@@ -13,13 +15,19 @@ module.exports = {
 	name: 'messageCreate',
 	execute(message) {
 		//return if message is by a bot
-		
 		if (message.author.bot == true) return;
+		//main procedure
 		main(message)
 	},
 };
 
 async function main(userMsg){
+	//check guild settins in database, if false return
+	result = await Guild.findOne({ guildId: userMsg.channel.guild.id}).select({ Xs: 1, _id: 0})
+	XsBool = result.Xs
+	if (!XsBool) return
+	
+	//computation
 	sendMsg = determineX(userMsg.content)
 	if (sendMsg == 'valid') {
 		await userMsg.reply("Ok bestie xx");
