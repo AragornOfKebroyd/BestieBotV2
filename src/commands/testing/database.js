@@ -44,7 +44,8 @@ async function AddDatabaseReord(interaction){
             guildId: interaction.guild.id,
             guildName: interaction.guild.name,
             guildIcon: interaction.guild.iconURL() ? interaction.guild.iconURL() : "None",
-            Xs: false
+            Xs: false,
+            Hello: true
         })
         
         await guildProfile.save().catch(console.error)

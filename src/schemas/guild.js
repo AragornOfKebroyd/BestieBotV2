@@ -5,7 +5,8 @@ const guildSchema = new Schema({
     guildId: String,
     guildName: String,
     guildIcon: { type: String, required: false },
-    Xs: Boolean
+    Xs: Boolean,
+    Hello: Boolean
 });
 
 //model('name of model', schema, 'collection to save to')
