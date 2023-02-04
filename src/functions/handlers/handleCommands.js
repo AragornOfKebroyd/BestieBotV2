@@ -10,7 +10,7 @@ module.exports = (client) => {
 
         //get all subfolders
         for (const folder of commandFolders){
-            
+            if (folder == 'testing') continue //dont add tesing commands
 	        const commandFiles = fs.readdirSync(`./src/commands/${folder}`).filter(file => file.endsWith('.js'));
             const { commands, commandArray } = client
             //get all files within subfolders

@@ -35,7 +35,7 @@ module.exports = {
 			const { customId } = interaction
 			
 			//special case for birthday as there are as many ids as there are people in the bdays db
-			if (customId.includes('BIRTHDAY')){
+			if (customId.includes('BIRTHDAY') || customId.includes('DEFINITION')){
 				const brokenDown = customId.split(':')
 				var button = buttons.get(brokenDown[2])
 				try {

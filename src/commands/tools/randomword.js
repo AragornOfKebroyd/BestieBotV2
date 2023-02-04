@@ -54,7 +54,7 @@ module.exports = {
 
 
 		embed = new EmbedBuilder()
-            .setTitle(`${wordresult.Word}. ${groups}`)
+            .setTitle(`${wordresult.Word}       ${groups}`)
             .setColor(client.colour)
             .setTimestamp(Date.now())
             .setFooter({

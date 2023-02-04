@@ -116,7 +116,6 @@ module.exports = {
             })
         } else{
             await interaction.update({
-                content:"i dont belive it no butter",
                 embeds: [currentembed],
                 components: currentpage 
             })
