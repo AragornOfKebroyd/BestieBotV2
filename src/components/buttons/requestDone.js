@@ -6,7 +6,7 @@ module.exports = {
         //change message
         message = interaction.message
         embed = message.embeds[0]
-        embed.data.colour = `${parseInt(client.green)}`
+        embed.data.color = `${parseInt(client.green)}`
 
         await interaction.update({
             content: '`Done!✅`',

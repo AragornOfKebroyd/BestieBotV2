@@ -6,7 +6,7 @@ module.exports = {
         //change message
         message = interaction.message
         embed = message.embeds[0]
-        embed.data.colour = `${parseInt(0x0055b3)}`
+        embed.data.color = `${parseInt(0x0055b3)}`
 
         buttons = message.components[0]
         for (button of buttons.components){
