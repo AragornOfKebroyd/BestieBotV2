@@ -11,8 +11,8 @@ const cities = [leeds, manchester, sheffield];
 
 module.exports = {
     cronInit(client) {
-        //Runs every 5 mins
-        cron.schedule('*/5 * * * *', function() {
+        //Runs every day at 7:00
+        cron.schedule('0 7 * * *', function() {
             main(client)
         });
     }
@@ -26,7 +26,7 @@ async function checkAvailability(storeID,productID) {
     if (result.probability == "OUT_OF_STOCK" || result.stock == 0){
         return "NA"
     }
-    answer = `${result.store.name} Ikea has ${result.stock} not blåhaj in stock!`;
+    answer = `${result.store.name} Ikea has ${result.stock} blåhaj in stock!`;
     return answer;
 }
 
@@ -38,10 +38,10 @@ async function main(client){
             continue
         }
         client.users.fetch(casper, false).then((user) => {
-            user.send(result)
+            //user.send(result) //disabled for now
         })
         client.users.fetch(ben, false).then((user) => {
-            user.send(result)
+            //user.send(result) //disabled for now
         })
     }
 }

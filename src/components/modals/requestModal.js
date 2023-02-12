@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js")
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js")
 
 module.exports = {
     data: {
@@ -6,7 +6,7 @@ module.exports = {
     },
     async execute(interaction, client) {
         await interaction.reply({
-            content: `A request has been sent for ${interaction.fields.getTextInputValue("name")} to Ben.`,
+            content: `A request has been sent for ***${interaction.fields.getTextInputValue("name")}*** to Ben.`,
             ephemeral: true
         });
         
@@ -26,9 +26,20 @@ module.exports = {
                 }
             ]);
         
+        acceptButton = new ButtonBuilder()
+            .setCustomId('requestAccept')
+            .setLabel('Accept')
+            .setStyle(ButtonStyle.Success)
+
+        denyButton = new ButtonBuilder()
+            .setCustomId('requestDeny')
+            .setLabel('Deny')
+            .setStyle(ButtonStyle.Danger)
+
         const channel = client.channels.cache.get('1063844604060913744'); //requests channel in bestie bot testing grounds
         channel.send({
-            embeds: [Embed]
+            embeds: [Embed],
+            components: [new ActionRowBuilder().addComponents(acceptButton, denyButton)]
         })
     }
 }

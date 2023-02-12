@@ -23,8 +23,10 @@ client.buttons = new Collection();
 client.selectMenus = new Collection();
 client.modals = new Collection();
 
-//colour to reference in embeds
+//colours to reference in embeds
 client.colour = "0x7b42f5";
+client.green = "0x3d8c40";
+client.red = "0xb90e0a";
 
 //me
 client.Aragorn = '619826088788623361'
