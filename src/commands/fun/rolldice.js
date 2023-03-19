@@ -34,7 +34,7 @@ module.exports = {
         //random between 1 and number of sides
         number = Math.floor(Math.random() * (interaction.options.getInteger('sides'))) + 1
         percentage = number / interaction.options.getInteger('sides')
-        await wait(1000);
+        await wait(1500);
         await interaction.editReply({
             embeds: [embed
                 .setImage('https://i.imgur.com/XxBU2.jpg?1')

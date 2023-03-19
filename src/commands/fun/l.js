@@ -43,8 +43,6 @@ module.exports = {
                 iconURL: client.user.displayAvatarURL(),
                 text: client.user.tag,
             })
-        console.log(l)
-        console.log(m*a*s*16*i*t)
         //reply
         await interaction.reply({
             embeds: [embed]

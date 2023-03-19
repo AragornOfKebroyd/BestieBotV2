@@ -29,7 +29,7 @@ module.exports = {
         headortail = Math.floor(Math.random() * 2)
 
         if (headortail == 0){//heads
-            await wait(1000);
+            await wait(1500);
             await interaction.editReply({
                 embeds: [embed
                     .setImage('https://i1.sndcdn.com/avatars-000597831615-6q438f-t500x500.jpg')
