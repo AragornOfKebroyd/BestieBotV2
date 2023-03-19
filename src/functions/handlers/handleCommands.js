@@ -1,11 +1,11 @@
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord.js');
 const fs = require('fs');
-const { token, clientId, guildId } = require("../../../config.json")
+const { guildId } = require("../../../config.json")
 const chalk = require('chalk');
 
 module.exports = (client) => {
-    client.handleCommands = async(where) => {
+    client.handleCommands = async(token, clientId, where) => {
         const commandFolders = fs.readdirSync("./src/commands")
 
         //get all subfolders

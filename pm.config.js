@@ -3,7 +3,7 @@ module.exports = {
   apps : [
     {
       name:"bot",
-      script: 'node \"src/bot.js\" allServers', //main file
+      script: 'npm run prod', //main file
       watch: true //any changes will cause a restart
     }
   ],/*

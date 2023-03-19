@@ -1,30 +1,34 @@
 const fs = require('node:fs');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const { token, testingtoken, oldtoken, mongoDBtoken } = require('../config.json');
+const { token, testingtoken, oldtoken, mongoDBtoken, clientId, clientIdTest, clientIdOld } = require('../config.json');
 const mongoose = require("mongoose"); const { connect } = require('mongoose')
 mongoose.set('strictQuery', false);
 
 //setup on where to post to and stuff
 if (process.argv.length > 2){
 	config = process.argv.slice(2)
-	if (config == 'allServers'){
-		where = 'everywhere'
-		login = testingtoken
-	} else if (config == 'testServer'){
+	if (config == 'testServer'){ //npm run test
 		where = 'testing'
 		login = testingtoken
-	} else if (config == 'production'){
+		id = clientIdTest
+	} else if (config == 'allServers'){ //npm run all
+		where = 'everywhere'
+		login = testingtoken
+		id = clientIdTest
+	} else if (config == 'production'){ //npm run prod
 		where = 'everywhere'
 		login = token
-	} else if (config == 'oldbot'){
+		id = clientId
+	} else if (config == 'oldbot'){ //npm run old
 		where = 'everywhere'
 		login = oldtoken
+		id = clientIdOld
 	}
-} else {
-	login = testingtoken
+} else { //node .
 	where = 'testing'
+	login = testingtoken
+	id = clientIdTest
 }
-console.log(login, where)
 
 //requirements for what the bot can access, its intents
 const { Guilds, GuildMessages, GuildMessageReactions, DirectMessages, MessageContent,  } = GatewayIntentBits
@@ -63,7 +67,7 @@ for (const folder of functionsFolders){
 }
 
 //run handlers
-client.handleCommands(where);
+client.handleCommands(login, id, where);
 client.handleEvents();
 client.handleCronjobs();
 client.handleComponents();
