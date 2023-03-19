@@ -4,9 +4,10 @@
   "description": "",
   "main": "src/bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node .",
-    "s": "node ."
+    "test": "node src/bot.js testServer",
+    "all": "node src/bot.js allServers",
+    "prod": "node src/bot.js production",
+    "old": "node src/bot.js oldbot"
   },
   "keywords": [],
   "author": "",

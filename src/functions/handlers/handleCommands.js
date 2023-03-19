@@ -5,7 +5,7 @@ const { token, clientId, guildId } = require("../../../config.json")
 const chalk = require('chalk');
 
 module.exports = (client) => {
-    client.handleCommands = async() => {
+    client.handleCommands = async(where) => {
         const commandFolders = fs.readdirSync("./src/commands")
 
         //get all subfolders
@@ -29,15 +29,15 @@ module.exports = (client) => {
         const rest = new REST({ version: '10' }).setToken(token);
         try {
             console.log(chalk.cyan("[CmdHandler]: Started refreshing application (/) commands."))
-
-            await rest.put(Routes.applicationGuildCommands(clientId, guildId), { 
-                body: client.commandArray
-            })
-            /* For all servers
-            await rest.put(Routes.applicationCommands(clientId), { 
-                body: commandArray 
-            });
-            */
+            if (where == 'testing'){
+                await rest.put(Routes.applicationGuildCommands(clientId, guildId), { 
+                    body: client.commandArray
+                })
+            }else if (where == 'everywhere'){
+                await rest.put(Routes.applicationCommands(clientId), { 
+                    body: client.commandArray 
+                });
+            }
             console.log(chalk.green("[CmdHandler]: Succesfully reloaded application (/) commands."))
         } 
         catch (error) {

@@ -3,7 +3,6 @@ const Subscription = require('../../schemas/subscriptions')
 const Birthday = require('../../schemas/birthdays')
 const chalk = require('chalk')
 
-
 module.exports = {
     data: {
         name: 'ButtonBday' //real one is actually BIRTHDAY:type:nextButtonBday:pagenum
@@ -21,15 +20,15 @@ module.exports = {
             replyflag = false
         }
 
-        privates = await Birthday.find({ Publicity: 'private', CreatedByDiscordId: interaction.user.id }).select({ _id: 1, Name: 1, Date:1 })
-        publics = await Birthday.find({ Publicity: 'public' }).select({ _id: 1, Name: 1, Date:1 })
-        result = privates.concat(publics)
+        //These 2 lines need to be this way round, otherwise everything goes to shit, i have absolutly no clue why, it makes 0 sense
+        subscriptionList = await Subscription.find({ DiscordID: interaction.user.id }).select({ RemindersArray : 1})
+        result = await Birthday.find({ CreatedByDiscordId: interaction.user.id }).select({ Name: 1, Date:1 })
+
         //calculate the number of pages needed
         numOfPages = Math.ceil(result.length / 12)
 
-        //get the reminders list of the person using the command
-        subscriptionList = await Subscription.find({ DiscordID: interaction.user.id }).select({ RemindersArray : 1, _id : 0})
         reminders = subscriptionList[0].RemindersArray
+        
 
         let currentembed = new EmbedBuilder()
             .setTitle(`Birthday Reminders ${page+1}/${numOfPages}`)
@@ -55,21 +54,24 @@ module.exports = {
             .setLabel("▶️")
             .setCustomId(`BIRTHDAY:next:ButtonBday:${page}`)
             .setStyle(ButtonStyle.Primary)
-        if (page == numOfPages-1){
+        if (page == numOfPages-1 || numOfPages == 0){
             rightbutton.setDisabled(true)
         }
 
-        currentactionrow = new ActionRowBuilder()
+        navActionRow = new ActionRowBuilder()
             .addComponents([
                 leftbutton, 
                 rightbutton
             ])
         //setup other stuff
+        //console.log(result)
         var currentpage = []
-        currentpage.push(currentactionrow)
+        currentpage.push(navActionRow)
         currentactionrow = new ActionRowBuilder()
         for (j = 12 * page; j < 12*page+12; j++){
             var person = result[j]
+            //console.log("person",person)
+            //console.log("res",result)
             //if it is more than there are
             if (j > result.length - 1){
                 //push the current action row

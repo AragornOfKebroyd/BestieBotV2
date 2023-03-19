@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const Birthday = require('../../schemas/birthdays')
 const Subscription = require('../../schemas/subscriptions')
 const chalk = require('chalk')
-//publicity not accounted for yet, needs to be able to have one of the same name in public and in private - todo
+
+//Needs a good look through and refactor for new only see what you have made feature
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -48,16 +49,7 @@ module.exports = {
                     { name: 'September', value: '9' },
                     { name: 'October', value: '10' },
                     { name: 'November', value: '11' },
-                    { name: 'December', value: '12' }))
-            .addUserOption(option => option
-                .setName('discordusername')
-                .setDescription('User of persons birthday(Not Required If Not Applicable)'))
-            .addStringOption(option => option
-                .setName('privacy')
-                .setDescription('Public: everyone can see and subscribe to, Private: Only you can see (default: Public)')
-                .addChoices(
-                    { name: 'public', value: 'public' },
-                    { name: 'private', value: 'private'})))
+                    { name: 'December', value: '12' })))
         .addSubcommand(subcommand => subcommand
             .setName('mute')
             .setDescription('Mute birthday reminders from the bot (turn back on with /unmute).'))
@@ -81,7 +73,7 @@ module.exports = {
                 .setMinValue(1)
                 .setMaxValue(31))
             .addStringOption(option => option
-                .setName('month')
+                .setName('newmonth')
                 .setDescription('Change the month of their birthday')
                 .addChoices(
                     { name: 'January', value: '1' },
@@ -95,19 +87,10 @@ module.exports = {
                     { name: 'September', value: '9' },
                     { name: 'October', value: '10' },
                     { name: 'November', value: '11' },
-                    { name: 'December', value: '12' }))
-            .addUserOption(option => option
-                .setName('newdiscordusername')
-                .setDescription('Change the discord username associated with this person'))
-            .addStringOption(option => option
-                .setName('newprivacy')
-                .setDescription('Change the privacy. Public: everyone can see, Private: Only you can see.')
-                .addChoices(
-                    { name: 'public', value: 'public' },
-                    { name: 'private', value: 'private'})))
+                    { name: 'December', value: '12' })))
         .addSubcommand(subcommand => subcommand
             .setName('delete')
-            .setDescription('Delete a birthday that you have added to the list or is under your username.')
+            .setDescription('Delete a birthday from your reminders.')
             .addStringOption(option => option
                 .setName('name')
                 .setDescription('Who do you want to delete')
@@ -117,13 +100,12 @@ module.exports = {
     async autocomplete(interaction, client){
         const focusedValue = interaction.options.getFocused();
         choices = []
-        privates = await Birthday.find({ Publicity: 'private', CreatedByDiscordId: interaction.user.id }).select({ Name: 1, CreatedByDiscordId:1, Username:1, _id: 0 })
-        publics = await Birthday.find({ Publicity: 'public' }).select({Name: 1, CreatedByDiscordId:1, Username:1, _id: 0 })
-        users = privates.concat(publics)
+        users = await Birthday.find({ CreatedByDiscordId: interaction.user.id }).select({ Name: 1, CreatedByDiscordId:1, _id: 0 })
+
         if (interaction.options.getSubcommand() == 'delete'){
             for (user of users){
                 choiseName = user.Name
-                if (user.CreatedByDiscordId == interaction.user.id || user.Username == interaction.user.tag){
+                if (user.CreatedByDiscordId == interaction.user.id){
                     choices.push(`🟢 ${choiseName}`) //special space character used so it is removed later
                 }
                 else{
@@ -164,9 +146,7 @@ module.exports = {
                 const addname = interaction.options.getString('name').replace(/[^\x00-\x7F]/g,"")//get rid of non ascii;
                 const day = interaction.options.getInteger('day');
                 const month = interaction.options.getString('month');
-                const username = interaction.options.getUser('discordusername') ?? 'None';
-                const privacy = interaction.options.getString('privacy') ?? 'public';
-                addBirthday(interaction, client, addname, day, month, username, privacy)
+                addBirthday(interaction, client, addname, day, month)
                 break;
             case 'mute':
                 //does as the name suggests
@@ -223,9 +203,7 @@ module.exports = {
                 const newname = interaction.options.getString('newname') ?? 'Dont Change';
                 const newday = interaction.options.getInteger('newday') ?? 'Dont Change';
                 const newmonth = interaction.options.getString('newmonth')?? 'Dont Change';
-                const newusername = interaction.options.getUser('newdiscordusername') ?? 'Dont Change';
-                const newprivacy = interaction.options.getString('newprivacy') ?? 'Dont Change';
-                editBirthday(interaction, client, editname, newname, newday, newmonth, newusername, newprivacy)
+                editBirthday(interaction, client, editname, newname, newday, newmonth)
                 break;
             default:
                 break;
@@ -334,14 +312,13 @@ async function preferencesReminders(interaction, client){
     })
 }
 
-async function addBirthday(interaction, client, name, day, month, username, privacy){
+async function addBirthday(interaction, client, name, day, month){
     //check if anyone with the same name is allready in the colleciton
     result = await Birthday.find({ Name:name })
     if (result.length > 0){
         //if it is not a private name that is being duped, there can be multiple private things with the same name
-        boolPrivate = result[0].privacy == 'private'
-        boolMadeByThisPerson = result[0].CreatedByDiscordId == interaction.user.id
-        if (boolPrivate == true && boolMadeByThisPerson == false){
+        CreatedBy = result[0].CreatedByDiscordId
+        if (CreatedBy == interaction.user.id){
             await interaction.reply({
                 content: `The name ${name} Is allready in the database, their birthday is stored as ${result[0].Date}.\nIf this is not who you are trying to add, sorry, add a second name or use a variation of the name.`,
                 ephemeral: true
@@ -356,10 +333,8 @@ async function addBirthday(interaction, client, name, day, month, username, priv
     //make new birthday item to add to colleciton
     brithdayItem = await new Birthday({
         _id: mongoose.Types.ObjectId(),
-        Username: username,
         Name: name,
         Date: date,
-        Publicity: privacy,
         CreatedByDiscordId: interaction.user.id
     })
 
@@ -375,9 +350,8 @@ async function addBirthday(interaction, client, name, day, month, username, priv
 
 async function deleteBirthday(interaction, client, name){
     //get name
-    public = await Birthday.find({ Name:name, Publicity:'public' }).select({ Name: 1, CreatedByDiscordId:1, Username:1, _id: 0 })
-    private = await Birthday.find({ Name:name, Publicity:'private', CreatedByDiscordId:interaction.user.id }).select({ Name: 1, CreatedByDiscordId:1, Username:1, _id: 0 })
-    result = public.concat(private)
+    result = await Birthday.find({ Name:name, CreatedByDiscordId:interaction.user.id }).select({ Name: 1, CreatedByDiscordId:1, _id: 0 })
+
     if (result.length == 0){
         await interaction.reply({
             content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`,
@@ -388,7 +362,6 @@ async function deleteBirthday(interaction, client, name){
     //there should only be one result, but deletes the first result in any case
     deleteUser = result[0].Name
     CreatedById = result[0].CreatedByDiscordId
-    Username = result[0].Username
     //If there is nobody in the database with that name
     if (!deleteUser){
         await interaction.reply({
@@ -399,7 +372,9 @@ async function deleteBirthday(interaction, client, name){
     }
     //console.log(interaction.member.permissions.toArray())//testing
     //If you are admin (or me) you can bypass the check to see if you made the member
-    if (CreatedById != interaction.user.id && !interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers) && interaction.user.tag != Username){ //&& !message.user.id == '619826088788623361'
+
+    //this perms thing needs work
+    if (CreatedById != interaction.user.id && !interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)){ //&& !message.user.id == '619826088788623361'
         await interaction.reply({
             content: `You cannot delete ${name} as you did not add them, you can ask an admin.`,
             ephemeral: true
@@ -421,11 +396,10 @@ async function deleteBirthday(interaction, client, name){
     }
 }
 
-async function editBirthday(interaction, client, name, newname, newday, newmonth, newusername, newprivacy){
+async function editBirthday(interaction, client, name, newname, newday, newmonth){
     //check if a user exists
-    public = await Birthday.find({ Name:name, Publicity:'public' })
-    private = await Birthday.find({ Name:name, Publicity:'private', CreatedByDiscordId:interaction.user.id })
-    result = public.concat(private)
+    result = await Birthday.find({ Name:name, CreatedByDiscordId:interaction.user.id })
+
     if (result.length == 0){
         await interaction.reply({
             content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`,
@@ -433,7 +407,7 @@ async function editBirthday(interaction, client, name, newname, newday, newmonth
         })
         return
     }
-    if (newname == 'Dont Change' && newusername == 'Dont Change' && newday == 'Dont Change' && newmonth == 'Dont Change' && newprivacy == 'Dont Change'){
+    if (newname == 'Dont Change' && newday == 'Dont Change' && newmonth == 'Dont Change'){
         await interaction.reply({
             content: `there is inputed nothing to change`,
             ephemeral: true
@@ -443,19 +417,13 @@ async function editBirthday(interaction, client, name, newname, newday, newmonth
     //new name
     if (newname == 'Dont Change') newname = result[0].Name
 
-    //new Username
-    if (newusername == 'Dont Change') newusername = result[0].Username
-    
     //calculate new date
     if (newday == 'Dont Change') newday = result[0].Date.split('/')[0]
     if (newmonth == 'Dont Change') newmonth = result[0].Date.split('/')[1]
     newdate = `${newday}/${newmonth}`
 
-    //newprivacy
-    if (newprivacy == 'Dont Change') newprivacy = result[0].Publicity
-
     //replace
-    Birthday.findOneAndUpdate({ Name : name }, { Username : newusername, Name: newname, Date: newdate, Publicity: newprivacy }, async function(err,res){
+    Birthday.findOneAndUpdate({ Name : name }, { Name: newname, Date: newdate }, async function(err,res){
         if (err) {
             console.error(err)
             console.log(chalk.red(`[Database]: ${name} Failed to update in birthday collection.`))
@@ -467,7 +435,7 @@ async function editBirthday(interaction, client, name, newname, newday, newmonth
         } else {
             console.log(chalk.blue(`[Database]: ${name} Updated in birthday collection.`))
             await interaction.reply({
-                content: `Succesfully updated ${name} in the birthday reminder list, new details:\nName: ${newname}\nBirthday: ${newdate}\nPrivacy: ${newprivacy}\nUsername: ${newusername}`,
+                content: `Succesfully updated ${name} in the birthday reminder list, new details:\nName: ${newname}\nBirthday: ${newdate}\n`,
                 ephemeral: true
             })
         }

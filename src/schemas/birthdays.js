@@ -2,10 +2,8 @@ const { Schema, model } = require('mongoose')
 
 const birthdaySchema = new Schema({
     _id: Schema.Types.ObjectId,
-    Username: String,
     Name: String,
     Date: String,
-    Publicity: String,
     CreatedByDiscordId: String
 });
 
