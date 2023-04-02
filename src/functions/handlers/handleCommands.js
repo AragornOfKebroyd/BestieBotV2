@@ -42,7 +42,6 @@ module.exports = (client) => {
                 await rest.put(Routes.applicationCommands(clientId), { 
                     body: client.commandArray
                 })
-                console.log(client.commandArray)
                 //reset guild commands so there arent two versions
                 await rest.put(Routes.applicationGuildCommands(clientId, guildId), { 
                     body: []

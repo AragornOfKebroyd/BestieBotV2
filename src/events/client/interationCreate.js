@@ -29,7 +29,6 @@ module.exports = {
 			}
 		}//buttons
 		else if (interaction.isButton()) {
-			
 			//get the button of the interactionId of the button
 			const { buttons } = client
 			const { customId } = interaction
