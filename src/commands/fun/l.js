@@ -6,6 +6,8 @@ module.exports = {
 		.setDescription('l'),
         
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
         //calculate 'l'
         /*
         l = mao (ofc)

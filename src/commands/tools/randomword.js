@@ -20,6 +20,8 @@ module.exports = {
                 { name: 'False', value: 'false' })),
 
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
         //choices
         if (!interaction.options.getString('hidden')) hidden = true; else {hidden = (interaction.options.getString('hidden') == 'true'); console.log("uwu",hidden)}
         if (!interaction.options.getString('choice')) typeChosen = 'Normal'; else typeChosen = interaction.options.getString('choice')

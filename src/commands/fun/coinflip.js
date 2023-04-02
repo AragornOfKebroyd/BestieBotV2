@@ -7,6 +7,8 @@ module.exports = {
 		.setDescription('Flip a Coin!'),
         
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
 		embed = new EmbedBuilder()
             .setTitle('Fliping coin....')
             .setColor(client.colour)

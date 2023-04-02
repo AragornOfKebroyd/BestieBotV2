@@ -6,6 +6,8 @@ module.exports = {
 		.setDescription('pop pop pop!'),
         
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
         bubble = '||pop||​' //uses a zero width space to make sure it line breaks at the correct point: >>​<<
         //20 = 2*2*5  12 = 3*2*2 //LCM = 2*2*3*5 = 60
         bubblewrap = bubble.repeat(60 * 3) //divisible by both 20 and 12 so it will make a whole thing on mobile or computer

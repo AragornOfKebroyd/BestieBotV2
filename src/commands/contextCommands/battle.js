@@ -17,6 +17,8 @@ module.exports = {
 		.setType(ApplicationCommandType.User),
 	
 	async execute(interaction, client) {
+		//check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
 		//get option of user
 		person = interaction.options._hoistedOptions[0].user
 		//default text

@@ -17,8 +17,7 @@ module.exports = {
                 guildIcon: guild.iconURL() ? guild.iconURL() : "None",
                 Xs: false,
                 Hello: false,
-                ChannelID: "setup",
-                AllowedRoles: "setup",
+                ChannelID: "0",
             })
             
             await guildProfile.save().catch(console.error)

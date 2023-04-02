@@ -5,6 +5,8 @@ module.exports = {
 		.setName('getAvatar')
 		.setType(ApplicationCommandType.User),
 	async execute(interaction, client) {
+		//check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
         await interaction.reply({
             content: `${interaction.targetUser.displayAvatarURL()}`
         })

@@ -13,6 +13,8 @@ module.exports = {
             .setMaxValue(1000000000)),
 
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
 		embed = new EmbedBuilder()
             .setTitle(`Rolling a d${interaction.options.getInteger('sides')}`)
             .setColor(client.colour)

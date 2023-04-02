@@ -6,6 +6,8 @@ module.exports = {
 		.setDescription('What is your ping?'),
 		
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
 		//defer reply to something we will do afterwards
 		const message = await interaction.deferReply({
 			fetchReply: true

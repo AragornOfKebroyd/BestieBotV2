@@ -24,6 +24,8 @@ module.exports = {
                 { name: 'False', value: 'false' })),
 
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
         //choices
         if (!interaction.options.getString('hidden')){
             hidden = true

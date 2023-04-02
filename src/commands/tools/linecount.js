@@ -9,6 +9,8 @@ module.exports = {
 		.setDescription('how many lines of code is bestie bot'),
 
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
 
 		const rootDir = path.join(__dirname, '..', '..', '..', 'src')
 		await interaction.deferReply()

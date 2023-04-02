@@ -6,6 +6,8 @@ module.exports = {
 		.setDescription('generate a random suvat equation'),
         
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
         
         itters = 300
         while (true){

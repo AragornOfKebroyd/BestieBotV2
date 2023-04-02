@@ -6,6 +6,8 @@ module.exports = {
 		.setDescription('Request a feature for Bestie Bot!'),
         
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
         const modal = new ModalBuilder()
             .setCustomId('requestModal')
             .setTitle('Request Form.')

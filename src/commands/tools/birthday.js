@@ -131,6 +131,8 @@ module.exports = {
     },
 
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
         switch (interaction.options.getSubcommand()) {
             case 'preferences':
                 //category is people or reminders

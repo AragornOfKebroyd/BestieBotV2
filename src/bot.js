@@ -74,7 +74,7 @@ client.handleCronjobs()
 client.handleComponents()
 
 //login to discord bot
-client.login(login)
+client.login(login); //needed semi colon
 
 //connect to MongoDB database
 (async () => {

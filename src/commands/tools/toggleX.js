@@ -16,6 +16,8 @@ module.exports = {
                 { name: 'Disable', value: 'disable' })),
 		
 	async execute(interaction, client) {
+        //check channel
+		if (await client.checkChannel(interaction, client) == false) { return }
 		const option = interaction.options.getString('choice')
         guildProfile = await Guild.findOne({ guildId: interaction.guild.id })
         XState = guildProfile.Xs
