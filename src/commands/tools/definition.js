@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const Word = require('../../schemas/words.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
+const Word = require('../../schemas/words.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -52,7 +52,7 @@ module.exports = {
         chosenWord =  interaction.options.getString('word')
 
         //check there is at least on in the DB
-        result = await Word.find({'Word': `${chosenWord.toLowerCase()}`, 'wordType': typeChosen});
+        result = await Word.find({'Word': `${chosenWord.toLowerCase()}`, 'wordType': typeChosen})
         console.log(result)
         if (result.length == 0){
             interaction.editReply({
@@ -63,6 +63,6 @@ module.exports = {
         }
 
         //if there is execute code in the button code so it can all go into a list
-        await client.buttons.get('DefinitionButton').execute(interaction, client, `DEFINITION:initiate:DefinitionButton:0:${chosenWord}`);
+        await client.buttons.get('DefinitionButton').execute(interaction, client, `DEFINITION:initiate:DefinitionButton:0:${chosenWord}`)
 	}
 }

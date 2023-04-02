@@ -1,4 +1,4 @@
-const Guild = require('../../schemas/guild');
+const Guild = require('../../schemas/guild')
 const mongoose = require('mongoose')
 const accepetedX = ['x', 'х', 'ҳ', 'ӽ', 'ᶍ', 'ӿ', 'χ', 'ᕽ', 'ˣ', '×', '╳', '✕', '✖', '⨯', '✗', '✘', '🗴', '🗶', '☒', '🗵', '🗷', '☓', '🞩', '❌', '❎', '⨉', '🗙', '𝄪', 'א', '𝔛', '𝖃', '𝔵', '𝖝', 'ㄨ', 'メ', '乂', '㐅', 'ᚷ', 'ᚸ', 'لا']
 
@@ -15,7 +15,7 @@ module.exports = {
 	name: 'messageCreate',
 	execute(message) {
 		//return if message is by a bot
-		if (message.author.bot == true) return;
+		if (message.author.bot == true) return
 		//main procedure
 		main(message)
 	},
@@ -30,7 +30,7 @@ async function main(userMsg){
 	//computation
 	sendMsg = determineX(userMsg.content)
 	if (sendMsg == 'valid') {
-		await userMsg.reply("Ok bestie xx");
+		await userMsg.reply("Ok bestie xx")
 	}
 }
 
@@ -40,7 +40,7 @@ function determineX(userMessage){
 	//whole whacky thing cause whacky characters are whacky
 	userMessageArray = []
 	for (codePoint of userMessage) {
-		userMessageArray.push(String.fromCodePoint(codePoint.codePointAt(0)));
+		userMessageArray.push(String.fromCodePoint(codePoint.codePointAt(0)))
 	}
 	//console.log(userMessageArray)//debugging
 	//itterate through string
@@ -91,9 +91,9 @@ function determineX(userMessage){
 //test if a character is alphanumeric in any language i think
 function isAlnum(ch) {
 	//exclude hypen
-	if (ch.match("-") != null) return true;
+	if (ch.match("-") != null) return true
 	//not really sure, just found it on the interwebs
-	alphanumeric = /^[\p{L}\p{N}]*$/u;
+	alphanumeric = /^[\p{L}\p{N}]*$/u
 	//if it is not in this scope it will be null, therefore not alphanumeric
 	if (ch.match(alphanumeric) != null){
 		return true

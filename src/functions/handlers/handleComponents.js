@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs')
 
 module.exports = (client) => {
     client.handleComponents = async () => {
@@ -6,31 +6,31 @@ module.exports = (client) => {
 
         for (const folder of componentsFolders){
 
-            const componentFiles = fs.readdirSync(`./src/components/${folder}`).filter(file => file.endsWith('.js'));
+            const componentFiles = fs.readdirSync(`./src/components/${folder}`).filter(file => file.endsWith('.js'))
 
             const { buttons, selectMenus, modals } = client
 
             switch (folder) {
                 case "buttons":
                     for (const file of componentFiles){
-                        const button = require(`../../components/${folder}/${file}`);
-                        buttons.set(button.data.name, button);
+                        const button = require(`../../components/${folder}/${file}`)
+                        buttons.set(button.data.name, button)
                     }
-                    break;
+                    break
                 case "selectMenus":
                     for (const file of componentFiles){
-                        const menu = require(`../../components/${folder}/${file}`);
-                        selectMenus.set(menu.data.name, menu);
+                        const menu = require(`../../components/${folder}/${file}`)
+                        selectMenus.set(menu.data.name, menu)
                     }
-                    break;
+                    break
                 case "modals":
                     for (const file of componentFiles){
-                        const modal = require(`../../components/${folder}/${file}`);
-                        modals.set(modal.data.name, modal);
+                        const modal = require(`../../components/${folder}/${file}`)
+                        modals.set(modal.data.name, modal)
                     }
-                    break;
+                    break
                 default:
-                    break;
+                    break
             }
         }
     }

@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandBuilder, PermissionsBitField } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandBuilder, PermissionsBitField } = require('discord.js')
 const mongoose = require('mongoose')
 const Birthday = require('../../schemas/birthdays')
 const Subscription = require('../../schemas/subscriptions')
@@ -98,7 +98,7 @@ module.exports = {
                 .setRequired(true))),
     
     async autocomplete(interaction, client){
-        const focusedValue = interaction.options.getFocused();
+        const focusedValue = interaction.options.getFocused()
         choices = []
         users = await Birthday.find({ CreatedByDiscordId: interaction.user.id }).select({ Name: 1, CreatedByDiscordId:1, _id: 0 })
 
@@ -124,30 +124,30 @@ module.exports = {
             }
         }
         
-        const filtered = choices.filter(choice => choice.replace(/[^\x00-\x7F]/g,"").startsWith(focusedValue));
+        const filtered = choices.filter(choice => choice.replace(/[^\x00-\x7F]/g,"").startsWith(focusedValue))
         await interaction.respond(
             filtered.map(choice => ({ name: choice, value: choice })).slice(0, 25),
-        );
+        )
     },
 
 	async execute(interaction, client) {
         switch (interaction.options.getSubcommand()) {
             case 'preferences':
                 //category is people or reminders
-                const category = interaction.options.getString('category');
+                const category = interaction.options.getString('category')
                 if (category == 'people') {
                     preferencesPeople(interaction, client)
                 }else {//reminders
                     preferencesReminders(interaction, client)
                 }
-                break;
+                break
             case 'add':
                 //get input values
-                const addname = interaction.options.getString('name').replace(/[^\x00-\x7F]/g,"")//get rid of non ascii;
-                const day = interaction.options.getInteger('day');
-                const month = interaction.options.getString('month');
+                const addname = interaction.options.getString('name').replace(/[^\x00-\x7F]/g,"")//get rid of non ascii
+                const day = interaction.options.getInteger('day')
+                const month = interaction.options.getString('month')
                 addBirthday(interaction, client, addname, day, month)
-                break;
+                break
             case 'mute':
                 //does as the name suggests
                 checkAndCreateSubProfileIfNotHasOne(interaction)
@@ -170,7 +170,7 @@ module.exports = {
                         ephemeral: true
                     })
                 }
-                break;
+                break
             case 'unmute':
                 //does as the name suggests
                 checkAndCreateSubProfileIfNotHasOne(interaction)
@@ -193,20 +193,20 @@ module.exports = {
                         ephemeral: true
                     })
                 }
-                break;
+                break
             case 'delete':
-                const deletename = interaction.options.getString('name').replace(/[^\x00-\x7F]/g,"");//get rid of circle and all other unicdoe
+                const deletename = interaction.options.getString('name').replace(/[^\x00-\x7F]/g,"")//get rid of circle and all other unicdoe
                 deleteBirthday(interaction,client,deletename)
-                break;
+                break
             case 'edit':
-                const editname = interaction.options.getString('name').replace(/[^\x00-\x7F]/g,"");//get rid of circle and all other unicdoe
-                const newname = interaction.options.getString('newname') ?? 'Dont Change';
-                const newday = interaction.options.getInteger('newday') ?? 'Dont Change';
-                const newmonth = interaction.options.getString('newmonth')?? 'Dont Change';
+                const editname = interaction.options.getString('name').replace(/[^\x00-\x7F]/g,"")//get rid of circle and all other unicdoe
+                const newname = interaction.options.getString('newname') ?? 'Dont Change'
+                const newday = interaction.options.getInteger('newday') ?? 'Dont Change'
+                const newmonth = interaction.options.getString('newmonth')?? 'Dont Change'
                 editBirthday(interaction, client, editname, newname, newday, newmonth)
-                break;
+                break
             default:
-                break;
+                break
         }
 	},
     preferencesPeople,
@@ -214,7 +214,7 @@ module.exports = {
     addBirthday,
     deleteBirthday,
     editBirthday
-};
+}
 async function checkAndCreateSubProfileIfNotHasOne(interaction){
    //first check if the user has a thing in the database
     result = await Subscription.find({ DiscordID:interaction.user.id })
@@ -247,7 +247,7 @@ async function preferencesPeople(interaction, client){
     checkAndCreateSubProfileIfNotHasOne(interaction)
 
     //code is in a button file so it can be executed when pressing nav buttons
-	await client.buttons.get('ButtonBday').execute(interaction, client, 'BIRTHDAY:initiate:ButtonBday:0');
+	await client.buttons.get('ButtonBday').execute(interaction, client, 'BIRTHDAY:initiate:ButtonBday:0')
 }
 
 async function preferencesReminders(interaction, client){
@@ -368,7 +368,7 @@ async function deleteBirthday(interaction, client, name){
             content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`,
             ephemeral: true
         })
-        return;
+        return
     }
     //console.log(interaction.member.permissions.toArray())//testing
     //If you are admin (or me) you can bypass the check to see if you made the member
@@ -379,7 +379,7 @@ async function deleteBirthday(interaction, client, name){
             content: `You cannot delete ${name} as you did not add them, you can ask an admin.`,
             ephemeral: true
         })
-        return;
+        return
     }
     //try catch loop for deleting user from the reminders list
     try {

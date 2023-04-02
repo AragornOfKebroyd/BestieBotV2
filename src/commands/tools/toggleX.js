@@ -1,5 +1,5 @@
-const Guild = require('../../schemas/guild');
-const { SlashCommandBuilder } = require('discord.js');
+const Guild = require('../../schemas/guild')
+const { SlashCommandBuilder } = require('discord.js')
 const chalk = require('chalk')
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
                 { name: 'Disable', value: 'disable' })),
 		
 	async execute(interaction, client) {
-		const option = interaction.options.getString('choice');
+		const option = interaction.options.getString('choice')
         guildProfile = await Guild.findOne({ guildId: interaction.guild.id })
         XState = guildProfile.Xs
 
@@ -75,4 +75,4 @@ module.exports = {
             }
         }
 	},
-};
+}

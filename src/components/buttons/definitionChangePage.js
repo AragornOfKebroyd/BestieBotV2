@@ -1,5 +1,5 @@
 const { ButtonStyle, EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js')
-const Word = require('../../schemas/words.js');
+const Word = require('../../schemas/words.js')
 const chalk = require('chalk')
 
 
@@ -20,7 +20,7 @@ module.exports = {
             replyflag = false
         }
 
-        result = await Word.find({'Word': `${chosenWord.toLowerCase()}`, 'wordType': typeChosen});
+        result = await Word.find({'Word': `${chosenWord.toLowerCase()}`, 'wordType': typeChosen})
         //calculate the number of pages needed
         numOfPages = result.length
 

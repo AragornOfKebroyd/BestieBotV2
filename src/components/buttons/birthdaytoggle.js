@@ -122,6 +122,6 @@ async function FrequencyRems(interaction, command){
             })
             break
         default:
-            break;
+            break
     }
 }

@@ -10,6 +10,6 @@ module.exports = {
             components: [],
             embeds:[embed],
             content: 'Request Denied'
-        });
+        })
     }
 }

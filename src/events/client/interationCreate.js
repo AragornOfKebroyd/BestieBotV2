@@ -8,20 +8,20 @@ module.exports = {
 			//get command
 			const { commands } = client
 			const { commandName } = interaction
-			const command = commands.get(commandName);
+			const command = commands.get(commandName)
 			
 			//if no command
 			if (!command) {
-				console.error(`No command matching ${interaction.commandName} was found.`);
-				return;
+				console.error(`No command matching ${interaction.commandName} was found.`)
+				return
 			}
 			//try to execute the command
 			try {
-				await command.execute(interaction, client);
-			}//if it errors
+				await command.execute(interaction, client)
+			} //if it errors
 			catch (error) {
-				console.error(`Error executing ${interaction.commandName}`);
-				console.error(error);
+				console.error(`Error executing ${interaction.commandName}`)
+				console.error(error)
 				await interaction.reply({
 					content: "Something went wrong while executing this command...",
 					ephemeral: true
@@ -39,7 +39,7 @@ module.exports = {
 				const brokenDown = customId.split(':')
 				var button = buttons.get(brokenDown[2])
 				try {
-					await button.execute(interaction, client, customId);
+					await button.execute(interaction, client, customId)
 				}//if it errors
 				catch (error) {
 					console.error(error)
@@ -53,22 +53,22 @@ module.exports = {
 
 			//run the button code
 			try {
-				await button.execute(interaction, client);
+				await button.execute(interaction, client)
 			}//if it errors
 			catch (error) {
 				console.error(error)
 			}
 		}//menu
 		else if (interaction.isStringSelectMenu()){
-			const { selectMenus } = client;
-			const { customId } = interaction;
-			const menu = selectMenus.get(customId);
+			const { selectMenus } = client
+			const { customId } = interaction
+			const menu = selectMenus.get(customId)
 
 			if (!menu) return new Error("there is no code for this select menu")
 
 			//run the menu code
 			try {
-				await menu.execute(interaction, client);
+				await menu.execute(interaction, client)
 			}//if it errors
 			catch (error) {
 				console.error(error)
@@ -76,14 +76,14 @@ module.exports = {
 		}//modals (little popup boxes to fill in text)
 		else if (interaction.type == InteractionType.ModalSubmit){
 			const { modals } = client
-			const { customId } = interaction;
-			const modal = modals.get(customId);
+			const { customId } = interaction
+			const modal = modals.get(customId)
 
 			if (!modal) return new Error("there is no code for this select modal")
 			
 			//run the modal code
 			try {
-				await modal.execute(interaction, client);
+				await modal.execute(interaction, client)
 			}//if it errors
 			catch (error) {
 				console.error(error)
@@ -91,14 +91,14 @@ module.exports = {
 		}//context menu apps
 		else if (interaction.isContextMenuCommand()){
 			const { commands } = client
-			const { customId } = interaction;
-			const contextCommand = commands.get(customId);
+			const { customId } = interaction
+			const contextCommand = commands.get(customId)
 
 			if (!contextCommand) return new Error("there is no code for this context command")
 			
 			//run the command code
 			try {
-				await contextCommand.execute(interaction, client);
+				await contextCommand.execute(interaction, client)
 			}//if it errors
 			catch (error) {
 				console.error(error)
@@ -107,21 +107,21 @@ module.exports = {
 		else if (interaction.type == InteractionType.ApplicationCommandAutocomplete){
 			const { commands } = client
 			const { commandName } = interaction
-			const command = commands.get(commandName);
+			const command = commands.get(commandName)
 			
 			//if no command
 			if (!command) {
-				console.error(`No command matching ${interaction.commandName} was found.`);
-				return;
+				console.error(`No command matching ${interaction.commandName} was found.`)
+				return
 			}
 			//try to execute the command
 			try {
 				await command.autocomplete(interaction, client)
 			}//if it errors
 			catch (error) {
-				console.error(`Error executing ${interaction.commandName}`);
+				console.error(`Error executing ${interaction.commandName}`)
 				console.error(error)
 			}
 		}
 	},
-};
+}

@@ -1,6 +1,6 @@
-const Guild = require('../../schemas/guild');
+const Guild = require('../../schemas/guild')
 const mongoose = require('mongoose')
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js')
 const chalk = require('chalk')
 
 module.exports = {
@@ -17,25 +17,26 @@ module.exports = {
                 { name: 'Delete', value: 'delete' })),
                 
 	async execute(interaction, client) {
-        const option = interaction.options.getString('operation');
+        const option = interaction.options.getString('operation')
         switch (option) {
             case 'add':
                 AddDatabaseReord(interaction)
-                break;
+                break
             case 'view':
                 ViewDataBaseRecord(interaction)
-                break;
+                break
             case 'delete':
                 DeleteDataBaseRecord(interaction)
-                break;
+                break
             default:
-                break;
+                break
         }
 	},
     AddDatabaseReord,
     ViewDataBaseRecord,
     DeleteDataBaseRecord
-};
+}
+
 async function AddDatabaseReord(interaction){
     let guildProfile = await Guild.findOne({ guildId: interaction.guild.id })
     if (!guildProfile){

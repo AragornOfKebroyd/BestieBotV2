@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -34,9 +34,9 @@ module.exports = {
                     value: 'field value 2',
                     inline: true
                 }
-            ]);
+            ])
         await interaction.reply({
             embeds: [embed]
         })
 	},
-};
+}

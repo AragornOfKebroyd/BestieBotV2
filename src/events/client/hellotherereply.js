@@ -1,4 +1,4 @@
-const Guild = require('../../schemas/guild');
+const Guild = require('../../schemas/guild')
 const mongoose = require('mongoose')
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
 		//main procedure
 		main(message)
 	},
-};
+}
 
 async function main(userMsg){
 	//check guild settins in database, if false return
@@ -18,6 +18,6 @@ async function main(userMsg){
 	Hello = result.Hello
 	if (!Hello) return
 	if (userMsg.content.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes('hello there')) {
-		await userMsg.reply("General Kenobi");
+		await userMsg.reply("General Kenobi")
 	}
 }

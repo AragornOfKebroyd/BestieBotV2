@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const wait = require('node:timers/promises').setTimeout;
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
+const wait = require('node:timers/promises').setTimeout
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -29,14 +29,14 @@ module.exports = {
         headortail = Math.floor(Math.random() * 2)
 
         if (headortail == 0){//heads
-            await wait(1500);
+            await wait(1500)
             await interaction.editReply({
                 embeds: [embed
                     .setImage('https://i1.sndcdn.com/avatars-000597831615-6q438f-t500x500.jpg')
                     .setTitle('Heads!')]
             })
         }else{//tails
-            await wait(1000);
+            await wait(1000)
             await interaction.editReply({
                 embeds: [embed
                     .setImage('https://upload.wikimedia.org/wikipedia/en/1/1a/Miles_%22Tails%22_Prower_Sonic_and_All-Stars_Racing_Transformed.png')

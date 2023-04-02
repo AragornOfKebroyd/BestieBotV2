@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, StringSelectMenuBuilder, ActionRowBuilder } = require('discord.js');
-const testMenu = require('../../components/selectMenus/testMenu');
+const { SlashCommandBuilder, StringSelectMenuBuilder, ActionRowBuilder } = require('discord.js')
+const testMenu = require('../../components/selectMenus/testMenu')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -45,4 +45,4 @@ module.exports = {
             components: [menu]
         })
 	},
-};
+}

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField } = require('discord.js')
 //has errors, not sure why
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,7 +8,7 @@ module.exports = {
         
 	async execute(interaction, client) {
         //roles of the person who ran the command
-        const { roles } = interaction.member;
+        const { roles } = interaction.member
         //get id
         const role = await interaction.guild.roles.fetch('1058366830600790057').catch(console.error)
 
@@ -50,4 +50,4 @@ module.exports = {
         }
         await roles.add(role).catch(console.error) //error
 	},
-};
+}

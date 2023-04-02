@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
+const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -18,6 +18,6 @@ module.exports = {
         
         modal.addComponents(new ActionRowBuilder().addComponents(textInput))
 
-        await interaction.showModal(modal);
+        await interaction.showModal(modal)
 	},
-};
+}

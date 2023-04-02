@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const Word = require('../../schemas/words.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
+const Word = require('../../schemas/words.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -34,7 +34,7 @@ module.exports = {
         //Get a random thing from DB
         if (typeChosen == "all"){
             //50 50 chance for each
-            fiftyfifty = Math.floor(Math.random() * 2);
+            fiftyfifty = Math.floor(Math.random() * 2)
             if (fiftyfifty == 0) typeChosen = 'Normal'; else typeChosen = 'Urban'
         } 
         result = await Word.aggregate([

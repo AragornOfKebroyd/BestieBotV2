@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -13,6 +13,6 @@ module.exports = {
 
         await interaction.reply({
             components: [new ActionRowBuilder().addComponents(button)]
-        });
+        })
 	},
-};
+}

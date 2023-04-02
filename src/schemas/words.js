@@ -9,7 +9,7 @@ const wordSchema = new Schema({
     Frequency: Number,
     wordType: String,
     LikeDislike: String
-});
+})
 
 //model('name of model', schema, 'collection to save to')
-module.exports = model('Word', wordSchema, 'Words');
+module.exports = model('Word', wordSchema, 'Words')

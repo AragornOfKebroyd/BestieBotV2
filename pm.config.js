@@ -19,4 +19,4 @@ module.exports = {
       'post-deploy' : 'npm install && pm2 reload pm.config.js'
     }
   }*/
-};
+}

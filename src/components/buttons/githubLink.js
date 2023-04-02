@@ -6,6 +6,6 @@ module.exports = {
         await interaction.reply({
             content: 'https://github.com/AragornOfKebroyd',
             ephemeral: true
-        });
+        })
     }
 }

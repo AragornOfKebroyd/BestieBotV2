@@ -1,7 +1,8 @@
-const chalk = require('chalk');
+const chalk = require('chalk')
 const { ActionRow }  = require('discord.js')
-const mongoose = require("mongoose"); const { connect } = require('mongoose')
-const Guild = require('../../schemas/guild');
+const mongoose = require("mongoose")
+const { connect } = require('mongoose')
+const Guild = require('../../schemas/guild')
 
 module.exports = {
 	name: 'guildCreate',
@@ -15,7 +16,9 @@ module.exports = {
                 guildName: guild.name,
                 guildIcon: guild.iconURL() ? guild.iconURL() : "None",
                 Xs: false,
-                Hello: false
+                Hello: false,
+                ChannelID: "setup",
+                AllowedRoles: "setup",
             })
             
             await guildProfile.save().catch(console.error)
@@ -28,4 +31,4 @@ module.exports = {
         }
         //could put some cool into code in here, asking for a settup
 	},
-};
+}

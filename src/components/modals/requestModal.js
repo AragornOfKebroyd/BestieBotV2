@@ -8,7 +8,7 @@ module.exports = {
         await interaction.reply({
             content: `A request has been sent for ***${interaction.fields.getTextInputValue("name")}*** to Ben.`,
             ephemeral: true
-        });
+        })
         
         Embed = new EmbedBuilder()
             .setTitle(`New Request from **${interaction.user.tag}** for ${interaction.fields.getTextInputValue("name")}`)
@@ -24,7 +24,7 @@ module.exports = {
                     name: 'Description:',
                     value: `${interaction.fields.getTextInputValue("description")}`
                 }
-            ]);
+            ])
         
         acceptButton = new ButtonBuilder()
             .setCustomId('requestAccept')
@@ -36,8 +36,9 @@ module.exports = {
             .setLabel('Deny')
             .setStyle(ButtonStyle.Danger)
 
-        const channel = client.channels.cache.get('1063844604060913744'); //requests channel in bestie bot testing grounds
-        channel.send({
+        const channel = client.channels.cache.get('1063844604060913744') //requests channel in bestie bot testing grounds
+        console.log(channel)
+        await channel.send({
             embeds: [Embed],
             components: [new ActionRowBuilder().addComponents(acceptButton, denyButton)]
         })

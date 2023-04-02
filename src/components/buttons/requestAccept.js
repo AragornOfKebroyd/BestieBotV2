@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js')
 
 module.exports = {
     data: {
@@ -12,14 +12,14 @@ module.exports = {
             components: [],
             embeds: [resendEmbed],
             content: 'Request Accepted'
-        });
+        })
 
         //set it back to base colour
         resendEmbed.data.color = `${parseInt(client.colour)}`
         resendEmbed.data.title = resendEmbed.data.title.replace("New Request", "Accepted Request")
 
         //send in accepted requests channel
-        const channel = client.channels.cache.get('1071572707457638430'); //accepted requests channel in bestie bot testing grounds
+        const channel = client.channels.cache.get('1071572707457638430') //accepted requests channel in bestie bot testing grounds
 
         remove = new ButtonBuilder()
             .setCustomId('requestRemove')

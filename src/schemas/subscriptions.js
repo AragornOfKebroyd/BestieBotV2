@@ -10,7 +10,7 @@ const subscriptionSchema = new Schema({
     DayBeforeReminder: Boolean,
     OnDayReminder: Boolean,
     Muted: Boolean
-});
+})
 
 //model('name of model', schema, 'collection to save to')
-module.exports = model('User', subscriptionSchema, 'subscriptions');
+module.exports = model('User', subscriptionSchema, 'subscriptions')

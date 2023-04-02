@@ -1,5 +1,5 @@
-const fs = require('fs');
-const { connection } = require('mongoose');
+const fs = require('fs')
+const { connection } = require('mongoose')
 
 module.exports = (client) => {
     client.handleEvents = async() => {
@@ -8,7 +8,7 @@ module.exports = (client) => {
         //get all subfolders
         for (const folder of eventsFolders){
             
-	        const eventsFiles = fs.readdirSync(`./src/events/${folder}`).filter(file => file.endsWith('.js'));
+	        const eventsFiles = fs.readdirSync(`./src/events/${folder}`).filter(file => file.endsWith('.js'))
             //switch case for each possible folder
             switch (folder) {
                 //client events
@@ -20,27 +20,27 @@ module.exports = (client) => {
                         //For multiple events on, for single events once (like ready)
 	                    if (event.once){
 		                    //event.name is the name of the event stored in each file, and event.execute is the function within the event files
-		                    client.once(event.name, (...args) => event.execute(...args, client));
+		                    client.once(event.name, (...args) => event.execute(...args, client))
 	                    } 
                         else{
-		                    client.on(event.name, (...args) => event.execute(...args, client));
+		                    client.on(event.name, (...args) => event.execute(...args, client))
 	                    }
                     }
-                    break;
+                    break
                 //database events
                 case "mongo":
                     for (const file of eventsFiles) {
                         const event = require(`../../events/${folder}/${file}`)
                         if (event.once){
-		                    connection.once(event.name, (...args) => event.execute(...args, client));
+		                    connection.once(event.name, (...args) => event.execute(...args, client))
 	                    } 
                         else{
-		                    connection.on(event.name, (...args) => event.execute(...args, client));
+		                    connection.on(event.name, (...args) => event.execute(...args, client))
 	                    }
                     }
-                    break;
+                    break
                 default:
-                    break;
+                    break
             }
         }
     }

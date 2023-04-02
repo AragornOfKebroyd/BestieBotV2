@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -11,12 +11,12 @@ module.exports = {
             .setRequired(true)),
     
     async autocomplete(interaction, client){
-        const focusedValue = interaction.options.getFocused();
-		const choices = ['red', 'blue', 'green', 'purple', 'toaster'];
-		const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+        const focusedValue = interaction.options.getFocused()
+		const choices = ['red', 'blue', 'green', 'purple', 'toaster']
+		const filtered = choices.filter(choice => choice.startsWith(focusedValue))
 		await interaction.respond(
 			filtered.map(choice => ({ name: choice, value: choice })),
-		);
+		)
     },
 
 
@@ -26,4 +26,4 @@ module.exports = {
             content: `You chose '${option}'`
         })
 	},
-};
+}

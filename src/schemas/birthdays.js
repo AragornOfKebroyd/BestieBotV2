@@ -5,7 +5,7 @@ const birthdaySchema = new Schema({
     Name: String,
     Date: String,
     CreatedByDiscordId: String
-});
+})
 
 //model('name of model', schema, 'collection to save to')
-module.exports = model('Birthday', birthdaySchema, 'birthdays');
+module.exports = model('Birthday', birthdaySchema, 'birthdays')

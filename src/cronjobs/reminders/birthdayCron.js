@@ -10,7 +10,7 @@ module.exports = {
         //Runs at 7am each morning
         cron.schedule('0 7 * * *', function() {
             main(client)
-        });
+        })
     }
 }
 

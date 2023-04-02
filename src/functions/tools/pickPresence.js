@@ -1,7 +1,7 @@
 const { ActivityType } = require('discord.js')
 
 module.exports = (client) => {
-    client.pickPresence = async () => {
+    client.pickPresence = async() => {
         //ActivityType.Watching, ActivityType.Listening, ActivityType.Playing, ActivityType.Competing, ActivityType.Streaming, ActivityType.Custom
         const presenceOptions = [
 			{
@@ -135,10 +135,10 @@ module.exports = (client) => {
         //random option that isnt the previous
         pastOption = randomOption
         //generate first random option
-        randomOption = Math.floor(Math.random() * presenceOptions.length);
+        randomOption = Math.floor(Math.random() * presenceOptions.length)
         //keep going untill it is not the previous
         while (randomOption == pastOption){
-            randomOption = Math.floor(Math.random() * presenceOptions.length);
+            randomOption = Math.floor(Math.random() * presenceOptions.length)
         }
         
         option = presenceOptions[randomOption]
