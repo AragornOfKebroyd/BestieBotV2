@@ -25,6 +25,7 @@ module.exports = (client) => {
                 console.log(chalk.yellow(`[CmdHandler]: Command: ${command.data.name} has passed through the handler`))//debugging
 	        }
         }
+
         //add slash commands to the bot
         const rest = new REST({ version: '10' }).setToken(token)
         try {
@@ -39,8 +40,9 @@ module.exports = (client) => {
                 })
             }else if (where == 'everywhere'){
                 await rest.put(Routes.applicationCommands(clientId), { 
-                    body: client.commandArray 
+                    body: client.commandArray
                 })
+                console.log(client.commandArray)
                 //reset guild commands so there arent two versions
                 await rest.put(Routes.applicationGuildCommands(clientId, guildId), { 
                     body: []
