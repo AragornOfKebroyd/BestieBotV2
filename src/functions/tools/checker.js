@@ -4,6 +4,13 @@ const Guild = require('../../schemas/guild')
 
 module.exports = (client) => {
     client.checkChannel = async (interaction, client) => {
+
+        // if it is in a dm
+        if (message.guild === null){
+            return true
+        }
+        
+        // get channel info
         inChannel = interaction.channel.id
         currentGuild = await Guild.findOne({ guildId: interaction.guild.id }).select({ ChannelID:1, _id: 0 })
         channels = currentGuild.ChannelID.split(",")
