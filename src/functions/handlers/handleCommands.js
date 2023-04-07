@@ -38,6 +38,7 @@ module.exports = (client) => {
                 await rest.put(Routes.applicationCommands(clientId), { 
                     body: []
                 })
+                console.log(chalk.green("[CmdHandler]: Succesfully reloaded application (/) commands in testing Guild only."))
             }else if (where == 'everywhere'){
                 await rest.put(Routes.applicationCommands(clientId), { 
                     body: client.commandArray
@@ -46,8 +47,8 @@ module.exports = (client) => {
                 await rest.put(Routes.applicationGuildCommands(clientId, guildId), { 
                     body: []
                 })
+                console.log(chalk.green("[CmdHandler]: Succesfully reloaded application (/) commands everywhere."))
             }
-            console.log(chalk.green("[CmdHandler]: Succesfully reloaded application (/) commands."))
         } 
         catch (error) {
             console.error(error)
