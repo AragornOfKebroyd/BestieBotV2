@@ -1,11 +1,12 @@
 const Guild = require('../../schemas/guild')
-const { SlashCommandBuilder } = require('discord.js')
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js')
 const chalk = require('chalk')
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('toggle-hello-there')
 		.setDescription('Enable or disable Bestie Bot replying to Hello There')
+		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addStringOption(option => option
             .setName('choice')
             .setDescription('Enable or Disable')

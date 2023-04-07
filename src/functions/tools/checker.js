@@ -9,7 +9,7 @@ module.exports = (client) => {
         if (interaction.guild === null){
             return true
         }
-
+        
         // get channel info
         inChannel = interaction.channel.id
         currentGuild = await Guild.findOne({ guildId: interaction.guild.id }).select({ ChannelID:1, _id: 0 })

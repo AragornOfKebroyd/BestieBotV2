@@ -35,23 +35,23 @@ for (const file of files) {
 	if (stat.isDirectory()) {
 	count += countLines(filePath)
 	} else if (path.extname(file) === '.js') {
-	const code = fs.readFileSync(filePath, 'utf-8')
-	const comments = []
+		const code = fs.readFileSync(filePath, 'utf-8')
+		const comments = []
 
-	acorn.parse(code, {
-		onComment: comments,
-		locations: true,
-		ecmaVersion: 2020
-	})
+		acorn.parse(code, {
+			onComment: comments,
+			locations: true,
+			ecmaVersion: 2020
+		})
 
-	let inString = false
-	for (let i = 0; i < code.length; i++) {
-		if (code[i] === '"' || code[i] === "'" || code[i] === "`") {
-		inString = !inString
-		} else if (code[i] === '\n' && !inString) {
-		count++
+		let inString = false
+		for (let i = 0; i < code.length; i++) {
+			if (code[i] === '"' || code[i] === "'" || code[i] === "`") {
+			inString = !inString
+			} else if (code[i] === '\n' && !inString) {
+			count++
+			}
 		}
-	}
 	}
 }
 return count

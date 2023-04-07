@@ -83,8 +83,6 @@ module.exports = {
 	},
 
 	async execute(interaction, client) {
-        //check channel
-		if (await client.checkChannel(interaction, client) == false) { return }
 		//special case so admin can allways use setup command
 		if (interaction.member.permissions.has('ADMINISTRATOR') != true && interaction.user.id != client.Aragorn){
 			return

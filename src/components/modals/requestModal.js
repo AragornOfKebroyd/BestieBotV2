@@ -1,3 +1,4 @@
+const { requestsChannel } = require('../../../config.json')
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js")
 
 module.exports = {
@@ -36,8 +37,8 @@ module.exports = {
             .setLabel('Deny')
             .setStyle(ButtonStyle.Danger)
 
-        const channel = client.channels.cache.get('1063844604060913744') //requests channel in bestie bot testing grounds
-        console.log(channel)
+        const channel = client.channels.cache.get(requestsChannel) //requests channel in bestie bot testing grounds
+
         await channel.send({
             embeds: [Embed],
             components: [new ActionRowBuilder().addComponents(acceptButton, denyButton)]

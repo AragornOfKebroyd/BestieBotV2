@@ -30,7 +30,7 @@ async function main(client){
                 return
             }
             await client.users.fetch(person.DiscordID, false).then((user) => {
-                user.send(`bonjour me matey, how r u, anyways its ${Name}'s birthday today!, isnt that great`)
+                user.send(`It's ${Name}'s birthday today!`)
             })
         }
     }
@@ -43,7 +43,7 @@ async function main(client){
                 return
             }
             await client.users.fetch(person.DiscordID, false).then((user) => {
-                user.send(`bonjour me matey, how r u, anyways its ${Name}'s birthday tommorow!, look forward to it`)
+                user.send(`It's ${Name}'s birthday tommorow!`)
             })
         }
     }
@@ -56,7 +56,7 @@ async function main(client){
                 return
             }
             await client.users.fetch(person.DiscordID, false).then((user) => {
-                user.send(`bonjour me matey, how r u, anyways its ${Name}'s birthday in 1 week!, get prepared`)
+                user.send(`It's ${Name}'s birthday in 1 week!`)
             })
         }
     }

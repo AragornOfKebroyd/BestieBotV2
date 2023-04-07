@@ -1,6 +1,6 @@
 const fs = require('node:fs')
 const { Client, GatewayIntentBits, Collection } = require('discord.js')
-const { token, testingtoken, oldtoken, mongoDBtoken, clientId, clientIdTest, clientIdOld } = require('../config.json')
+const { token, testingtoken, oldtoken, mongoDBtoken, clientId, clientIdTest, clientIdOld, OwnerId } = require('../config.json')
 const mongoose = require("mongoose")
 const { connect } = require('mongoose')
 mongoose.set('strictQuery', false)
@@ -56,7 +56,7 @@ client.green = 4033600 // 0x3d8c40
 client.red = 12127754 // 0xb90e0a
 
 //me
-client.Aragorn = '619826088788623361'
+client.Aragorn = OwnerId
 
 //functions
 const functionsFolders = fs.readdirSync("./src/functions")
