@@ -1,12 +1,12 @@
 # BestieBotV2
 A personal project discord bot with some cool functionality including reminders, database managmnet, fun features and more
 Youll need to create a config file as it has been ommited
-{\n
-    "token" : "Your Token",
-    "testingtoken" : "If you want to test",
-    "oldtoken": "Not needed",
-    "mongoDBtoken": "For database",
-    "clientId" : "Bots client Id",
+{<br />
+    "token" : "Your Token",<br />
+    "testingtoken" : "If you want to test",<br />
+    "oldtoken": "Not needed",<br />
+    "mongoDBtoken": "For database",<br />
+    "clientId" : "Bots client Id",<br />
     "clientIdTest": "Testing Bots client Id",
     "clientIdOld": "Not needed",
     "guildId" : "Guild ID for your testing",
