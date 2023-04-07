@@ -2,7 +2,7 @@
 A personal project discord bot with some cool functionality including reminders, database managmnet, fun features and more<br />
 Youll need to create a config file as it has been ommited<br />
 {<br />
-    __"token" : "Your Token",<br />
+»"token" : "Your Token",<br />
     __"testingtoken" : "If you want to test",<br />
     __"oldtoken": "Not needed",<br />
     __"mongoDBtoken": "For database",<br />
