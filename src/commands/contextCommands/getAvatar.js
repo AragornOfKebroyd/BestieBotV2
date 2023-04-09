@@ -8,7 +8,8 @@ module.exports = {
 		//check channel
 		if (await client.checkChannel(interaction, client) == false) { return }
         await interaction.reply({
-            content: `${interaction.targetUser.displayAvatarURL()}`
+            content: `${interaction.targetUser.displayAvatarURL()}`,
+			ephemeral: true
         })
 	},
 }
