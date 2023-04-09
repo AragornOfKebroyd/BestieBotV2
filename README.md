@@ -1,5 +1,5 @@
 # BestieBotV2
-A personal project discord bot with some cool functionality including reminders, database managmnet, fun features and more<br />
+A personal project discord bot with some cool functionality including reminders, database management, fun features and more<br />
 Youll need to create a config file as it has been ommited<br />
 ```json
 {
