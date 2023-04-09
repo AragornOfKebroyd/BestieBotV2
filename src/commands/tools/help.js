@@ -16,6 +16,11 @@ module.exports = {
             .setColor(client.colour)
             .setThumbnail(client.user.displayAvatarURL())
             .setTimestamp(Date.now())
+            .setAuthor({
+                url: 'https://github.com/AragornOfKebroyd/BestieBotV2/blob/main/PRIVACY.md',
+                iconURL: client.user.displayAvatarURL(),
+                name: `Privacy Policy`
+            })
             .setFooter({
                 iconURL: client.user.displayAvatarURL(),
                 text: client.user.tag,
