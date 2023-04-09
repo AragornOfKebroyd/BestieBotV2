@@ -16,7 +16,7 @@ and displaying the server name in some messages. We may also use this personal d
 
 ### Legal basis for processing
 We rely on your explicit consent as the legal basis for collecting and processing your personal data. 
-You may withdraw your consent at any time by contacting me directly via @AragornOfKebroyd#3844, or in the support server: 
+You may withdraw your consent at any time by contacting me directly via @AragornOfKebroyd#3844 on discord, or in the support server: 
 https://discord.com/invite/SYKg9ybsAh.
 
 ### Data retention
@@ -33,7 +33,8 @@ Under GDPR, you have the following rights regarding your personal data:
  * Right to object: You have the right to object to the processing of your personal data.
  * Right to data portability: You have the right to request a copy of your personal data in a structured, machine-readable format.
 
-To exercise any of these rights, please contact me directly.
+To exercise any of these rights, please contact me directly via @AragornOfKebroyd#3844 on discord, or in the support server: 
+https://discord.com/invite/SYKg9ybsAh.
 
 ### Data protection officer
 I do not require a data protection officer as we do not process personal data on a large scale.
