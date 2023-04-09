@@ -39,7 +39,7 @@ module.exports = {
         await wait(1500)
         await interaction.editReply({
             embeds: [embed
-                .setImage('https://i.imgur.com/XxBU2.jpg?1')
+                .setImage('https://imageio.forbes.com/blogs-images/davidewalt/files/2012/09/d20-300x300.jpg?format=jpg&width=250')
                 .setTitle(`Rolled a ${interaction.options.getInteger('sides')} sided dice and got ${number}`)]
         })
 	},

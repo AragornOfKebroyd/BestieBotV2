@@ -31,10 +31,7 @@ module.exports = {
 			.setDescription('the bot will be able to be interacted with in all channels'))
 		.addSubcommand(subcommand => subcommand
 			.setName('remove_all_channels')
-			.setDescription('the bot wont be able to be interacted with in all channels'))
-		.addSubcommand(subcommand => subcommand
-			.setName('test')
-			.setDescription('test')),
+			.setDescription('the bot wont be able to be interacted with in all channels')),
 	
 	async autocomplete(interaction, client){
 		const focusedValue = interaction.options.getFocused()

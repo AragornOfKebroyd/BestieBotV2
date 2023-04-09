@@ -399,9 +399,22 @@ async function deleteBirthday(interaction, client, name){
 }
 
 async function editBirthday(interaction, client, name, newname, newday, newmonth){
+    // check the new name does not conflict
+    check = await Birthday.find({ Name:newname })
+    if (check.length > 0){
+        CreatedBy = check[0].CreatedByDiscordId
+        if (CreatedBy == interaction.user.id){
+            await interaction.reply({
+                content: `The name ${newname} Is allready in the database, their birthday is stored as ${check[0].Date}.\nIf this is not who you are trying to add, sorry, add a second name or use a variation of the name.`,
+                ephemeral: true
+            })
+            return
+        }
+    }
+    
     //check if a user exists
     result = await Birthday.find({ Name:name, CreatedByDiscordId:interaction.user.id })
-
+    
     if (result.length == 0){
         await interaction.reply({
             content: `${name} was not in the reminders list, the search is very sensitive, try /birthday list to see who is in the birthday reminders list.`,

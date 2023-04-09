@@ -38,7 +38,7 @@ module.exports = {
             .setStyle(ButtonStyle.Danger)
 
         const channel = client.channels.cache.get(requestsChannel) //requests channel in bestie bot testing grounds
-
+        
         await channel.send({
             embeds: [Embed],
             components: [new ActionRowBuilder().addComponents(acceptButton, denyButton)]
