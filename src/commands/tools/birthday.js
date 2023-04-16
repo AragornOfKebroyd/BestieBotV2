@@ -9,10 +9,10 @@ const chalk = require('chalk')
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('birthday')
-		.setDescription('For Birthday reminders')
+		.setDescription('For Birthday reminders, do /help for privacy policy')
         .addSubcommand(subcommand => subcommand
             .setName('preferences')
-            .setDescription('When do you want to get birthday reminders and who for.')
+            .setDescription('When do you want to get birthday reminders and who for. /help for privacy policy')
             .addStringOption(option => option
                 .setName('category')
                 .setDescription('People: which birthdays do you want to be reminded about, Frequency: How Often')
@@ -22,7 +22,7 @@ module.exports = {
                     { name: 'Frequency', value: 'reminders' })))
         .addSubcommand(subcommand => subcommand
             .setName('add')
-            .setDescription('Add a persons birthday.')
+            .setDescription('Add a persons birthday. /help for privacy policy')
             .addStringOption(option => option
                 .setName('name')
                 .setDescription('Persons name')
@@ -131,6 +131,9 @@ module.exports = {
     },
 
 	async execute(interaction, client) {
+
+        checkAndCreateSubProfileIfNotHasOne(interaction)
+
         //check channel
 		if (await client.checkChannel(interaction, client) == false) { return }
         switch (interaction.options.getSubcommand()) {
