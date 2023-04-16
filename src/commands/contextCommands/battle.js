@@ -1,6 +1,8 @@
 const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, AttachmentBuilder } = require('discord.js')
 const { Configuration, OpenAIApi } = require("openai")
 const { openAIkey } = require('../../../config.json')
+const path = require('path')
+const imageDir = path.join(__dirname, '..', '..', '..', 'assets', 'images')
 
 //OpenAI Config
 const configuration = new Configuration({
@@ -19,6 +21,7 @@ module.exports = {
 	async execute(interaction, client) {
 		//check channel
 		if (await client.checkChannel(interaction, client) == false) { return }
+		
 		//get option of user
 		person = interaction.options._hoistedOptions[0].user
 		//default text
@@ -70,9 +73,11 @@ module.exports = {
 				resulttext = defaultText
 			}
 		}
-		const image = new AttachmentBuilder('assets/images/battle_image.png')
-
-		const Embed = new EmbedBuilder()
+		try {
+			imagePath = path.join(imageDir, 'battle_image.png')
+			const image = new AttachmentBuilder(imagePath)
+			const Embed = new EmbedBuilder()
+			
 			.setTitle(`Battle between ${interaction.user.username} and ${person.username}`)
 			.setDescription(`${resulttext}`)
 			.setColor(client.colour)
@@ -84,9 +89,26 @@ module.exports = {
 				text: client.user.tag,
 			})
 
-		await interaction.editReply({
-            embeds: [Embed],
-			files: [image]
-        })
+			await interaction.editReply({
+				embeds: [Embed],
+				files: [image]
+			})
+		} catch (error) {
+			const Embed = new EmbedBuilder()
+			.setTitle(`Battle between ${interaction.user.username} and ${person.username}`)
+			.setDescription(`${resulttext}`)
+			.setColor(client.colour)
+			.setThumbnail(person.displayAvatarURL())
+			.setTimestamp(Date.now())
+			.setFooter({
+				iconURL: client.user.displayAvatarURL(),
+				text: client.user.tag,
+			})
+
+			await interaction.editReply({
+				embeds: [Embed]
+			})
+			console.log(error)
+		}		
 	},
 }
