@@ -10,16 +10,16 @@ module.exports = {
 		if (await client.checkChannel(interaction, client) == false) { return }
 		
 		const embed = new EmbedBuilder()
-            .setTitle('Xx Bestie Bot V2')
-            .setURL('https://github.com/AragornOfKebroyd/BestieBotV2')
+            .setTitle('Privacy Policy')
+            .setURL('https://github.com/AragornOfKebroyd/BestieBotV2/blob/main/PRIVACY.md')
             .setDescription('**This is an overview of all commands of Xx Besite Bot V2**')
             .setColor(client.colour)
             .setThumbnail(client.user.displayAvatarURL())
             .setTimestamp(Date.now())
             .setAuthor({
-                url: 'https://github.com/AragornOfKebroyd/BestieBotV2/blob/main/PRIVACY.md',
+                url: 'https://github.com/AragornOfKebroyd/BestieBotV2',
                 iconURL: client.user.displayAvatarURL(),
-                name: `Privacy Policy`
+                name: `Xx Bestie Bot V2`
             })
             .setFooter({
                 iconURL: client.user.displayAvatarURL(),
