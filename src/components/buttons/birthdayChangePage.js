@@ -23,6 +23,7 @@ module.exports = {
         //These 2 lines need to be this way round, otherwise everything goes to shit, i have absolutly no clue why, it makes 0 sense
         subscriptionList = await Subscription.find({ DiscordID: interaction.user.id }).select({ RemindersArray : 1})
         result = await Birthday.find({ CreatedByDiscordId: interaction.user.id }).select({ Name: 1, Date:1 })
+        result.sort((a,b) => a.Date.split('/')[1] - b.Date.split('/')[1] || a.Date.split('/')[0] - b.Date.split('/')[0])
 
         //calculate the number of pages needed
         numOfPages = Math.ceil(result.length / 12)

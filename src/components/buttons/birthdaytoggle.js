@@ -29,6 +29,8 @@ module.exports = {
                         PeopleRems(interaction, idCheck)
                     } else if (['OnDay', 'DayBefore', 'WeekBefore', 'ThisMonth'].includes(command)) {
                         FrequencyRems(interaction, command)
+                    } else if (command == 'export') {
+                        ExportToggle(interaction, idCheck)
                     }
                 }
             }
@@ -66,7 +68,6 @@ async function PeopleRems(interaction, idCheck){
         }
     })
 }
-
 
 async function FrequencyRems(interaction, command){
     reminders = await Subscription.find({ DiscordID: interaction.user.id })
@@ -124,4 +125,29 @@ async function FrequencyRems(interaction, command){
         default:
             break
     }
+}
+
+async function ExportToggle(interaction, idCheck) {
+    subscriptionList = await Subscription.find({ DiscordID: interaction.user.id })
+    bdayExports = subscriptionList[0].TempExport
+    username = subscriptionList[0].Username
+    
+    //update db
+    if (bdayExports.includes(idCheck)){
+        //remove it
+        bdayExports.pull(idCheck)
+    } else{
+        //add it
+        bdayExports.push(idCheck)
+    }
+    Subscription.findOneAndUpdate({ DiscordID : interaction.user.id }, { TempExport: bdayExports }, function(err,res){
+        if (err){
+            console.error(err)
+            console.log(chalk.red(`[Database]: ${username} Failed to update in birthday collection.`))
+            return
+        } else{
+            console.log(chalk.blue(`[Database]: ${username} Updated in birthday collection.`))
+            return
+        }
+    })
 }

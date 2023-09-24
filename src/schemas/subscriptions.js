@@ -9,7 +9,8 @@ const subscriptionSchema = new Schema({
     WeekBeforeReminder: Boolean,
     DayBeforeReminder: Boolean,
     OnDayReminder: Boolean,
-    Muted: Boolean
+    Muted: Boolean,
+    TempExport: Array
 })
 
 //model('name of model', schema, 'collection to save to')

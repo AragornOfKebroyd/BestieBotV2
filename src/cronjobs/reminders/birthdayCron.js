@@ -8,7 +8,7 @@ module.exports = {
     cronInit(client) {
         //main(client)//for testing purposes
         //Runs at 7am each morning
-        cron.schedule('0 7 * * *', function() {
+        cron.schedule('30 6 * * *', function() {
             main(client)
         })
     }
@@ -64,9 +64,9 @@ async function main(client){
 
 //Calculate the date at which is 7 days from now, one day from now and today
 function datesCalc(){
-    //set the date today and set time to 7:00am
+    //set the date today and set time to 6:30am
     today = new Date()
-    today.setHours(7, 0, 0, 0)
+    today.setHours(6, 30, 0, 0)
     //find dates in one day and one week
     oneDay = new Date(today.getTime() + 1 * 24 * 60 * 60 * 1000)
     oneWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
