@@ -491,16 +491,14 @@ async function nextBirthdays(interaction, client, number, type) { //type can be 
     checkAndCreateSubProfileIfNotHasOne(interaction)
 
     result = await Birthday.find({ CreatedByDiscordId: interaction.user.id, }).select({ Name: 1, Date: 1 })
-    result = await result.sort((a, b) => a.Date.split('/')[1] - b.Date.split('/')[1] || a.Date.split('/')[0] - b.Date.split('/')[0])
-    if (result.length == 1) {
-        console.log(result)
-    }
+    sorted = await result.sort((a, b) => a.Date.split('/')[1] - b.Date.split('/')[1] || a.Date.split('/')[0] - b.Date.split('/')[0])
     if (type == 'subscribed') {
         subscriptionList = await Subscription.find({ DiscordID: interaction.user.id }).select({ RemindersArray: 1 })
         reminders = subscriptionList[0].RemindersArray
-        console.log(result.length)
-        result = await result.filter(birthday => reminders.includes(birthday._id) === true)
-        console.log('filtered', result.length)
+        filtered = await sorted.filter(birthday => reminders.includes(birthday._id) === true)
+        data = filtered
+    } else {
+        data = sorted
     }
     today = new Date()
     let [today_day, today_month] = [today.getDate(), today.getMonth() + 1]
@@ -509,7 +507,7 @@ async function nextBirthdays(interaction, client, number, type) { //type can be 
 
     // find the next birthday
     let i = 0
-    for (birthday of result) {
+    for (birthday of data) {
         console.log(i, birthday)
         let [bday_day, bday_month] = birthday.Date.split('/')
         if (bday_month > today_month) {
@@ -524,15 +522,14 @@ async function nextBirthdays(interaction, client, number, type) { //type can be 
         }
         i++
     }
-    console.log(result[firstIndex])
 
     let index = firstIndex
     let birthdaysToShow = []
     while (true) {
-        birthdaysToShow.push(result[index])
+        birthdaysToShow.push(data[index])
         if (birthdaysToShow.length >= number) break
         index++
-        if (index > result.length - 1) index = 0
+        if (index > data.length - 1) index = 0
     }
 
     let nextBdaysEmbed = new EmbedBuilder()
@@ -545,9 +542,16 @@ async function nextBirthdays(interaction, client, number, type) { //type can be 
             text: client.user.tag,
         })
         .addFields(birthdaysToShow.map(birthday => {
-            return {
-                name: birthday.Name,
-                value: birthday.Date
+            if (birthday) {
+                return {
+                    name: birthday.Name,
+                    value: birthday.Date
+                }
+            } else {
+                return {
+                    name: 'Error',
+                    value: 'Error'
+                }
             }
         }))
 
