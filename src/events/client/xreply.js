@@ -77,10 +77,18 @@ function determineX(userMessage){
 					break
 				}
 			}
+			
+			// check if it is x.com
+			if ((charInd + 4 < userMessageArray.length) && (userMessageArray.slice(charInd+1,charInd+5).join('') == '.com')) {
+				twitter = true
+			} else {
+				twitter = false
+			}
 
 			//console.log("before:[",userMessageArray[beforeind],"]","\nafter:[",userMessageArray[afterind],"]", "\nendflag:",endflag)//debugging
 			//then check for alphanumeric on both sides
-			if ((beforeflag == true || isAlnum(userMessageArray[beforeind]) == false) && (endflag == true || isAlnum(userMessageArray[afterind]) == false)){
+			
+			if ((beforeflag == true || isAlnum(userMessageArray[beforeind]) == false) && (endflag == true || isAlnum(userMessageArray[afterind]) == false) && !twitter){
 				return "valid"
 			}
 		}

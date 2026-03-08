@@ -363,8 +363,11 @@ async function addBirthday(interaction, client, name, day, month) {
     date = `${day}/${month}`
 
     //make new birthday item to add to colleciton
+
+    userId = mongoose.Types.ObjectId()
+
     brithdayItem = await new Birthday({
-        _id: mongoose.Types.ObjectId(),
+        _id: userId,
         Name: name,
         Date: date,
         CreatedByDiscordId: interaction.user.id
@@ -378,6 +381,29 @@ async function addBirthday(interaction, client, name, day, month) {
         ephemeral: true
     })
     console.log(chalk.blue(`[Database]: Person: ${name} has been added to the birthdays colleciton`))
+
+    // add them to reminders
+    checkAndCreateSubProfileIfNotHasOne(interaction)
+
+    subscriptionList = await Subscription.find({ DiscordID: interaction.user.id })
+    reminders = subscriptionList[0].RemindersArray
+    username = subscriptionList[0].Username
+    
+    //update db
+    if (!reminders.includes(userId)){
+        reminders.push(userId)
+    }
+    Subscription.findOneAndUpdate({ DiscordID : interaction.user.id }, { RemindersArray: reminders }, function(err,res){
+        if (err){
+            console.error(err)
+            console.log(chalk.red(`[Database]: ${username} Failed to update in birthday collection.`))
+            return
+        } else{
+            console.log(chalk.blue(`[Database]: ${username} Updated in birthday collection.`))
+            return
+        }
+    })
+
 }
 
 async function deleteBirthday(interaction, client, name) {
@@ -502,7 +528,6 @@ async function nextBirthdays(interaction, client, number, type) { //type can be 
     }
     today = new Date()
     let [today_day, today_month] = [today.getDate(), today.getMonth() + 1]
-    today_day = '25'
     let firstIndex = 0
 
     // find the next birthday

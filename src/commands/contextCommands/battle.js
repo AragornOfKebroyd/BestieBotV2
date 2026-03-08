@@ -1,17 +1,15 @@
 const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, AttachmentBuilder } = require('discord.js')
-const { Configuration, OpenAIApi } = require("openai")
-const { openAIkey } = require('../../../config.json')
+const { OpenAI } = require("openai")
+const { openAIkey, UseAI } = require('../../../config.json')
 const path = require('path')
 const imageDir = path.join(__dirname, '..', '..', '..', 'assets', 'images')
 
 //OpenAI Config
-const configuration = new Configuration({
+const openai = new OpenAI({
 	apiKey: openAIkey,
 })
-const openai = new OpenAIApi(configuration)
-const gpt = true //Not bad ~$0.0005 per text generation
-const model = 'gpt-3.5'
-//const model = 'curie'
+
+const gpt = UseAI //Not bad ~$0.0005 per text generation
 
 module.exports = {
 	data: new ContextMenuCommandBuilder()
@@ -25,7 +23,7 @@ module.exports = {
 		//get option of user
 		person = interaction.options._hoistedOptions[0].user
 		//default text
-        defaultText = `${interaction.user.username} fights ${person.username}`
+    defaultText = `${interaction.user.username} fights ${person.username} (AI generation is disabled for now)`
 
 		//defer reply
 		await interaction.deferReply({ephemeral: false})
@@ -35,34 +33,20 @@ module.exports = {
 			resulttext = defaultText
 		} else {
 			try {
-				if (model == 'curie'){
-					const completion = await openai.createCompletion({
-						model: "text-curie-001", //best price performace tradeoff $0.002 per 1k tokens, so 500000 tokens per dollar
-						prompt: `input: Write a 6 sentence paragraph friendly duel between ${interaction.user.username} and ${person.username}, both with random weapons. Nobody is hurt\noutput:`,
-						frequency_penalty: 0.4,
-						presence_penalty: 0.5,
-						best_of: 1,
-						top_p: 1,
-						max_tokens: 256,
-						temperature: 0.7
-					})
-					for (thing of completion.data.choices){
-						resulttext = `${resulttext}${thing.text}`
-					}
-				} else if (model == 'gpt-3.5'){
-					const completion = await openai.createChatCompletion({
-						model:"gpt-3.5-turbo",
-						messages:[
-							{role: "system", content: "You are an author of epic duel fight scenes, when prompted with a choice of a random weapon, you will not just say random weapon, you will choose a weapon and describe it"},
-							{role: "user", content: `Write a short 2 paragraph compelling and intense duel between ${interaction.user.username} and ${person.username}, both using cool and interesting random weapons, in a random location. Nobody should die or get badly injured, but there should be a winner.`}
-						],
-						max_tokens:350
-					})
-					resulttext = completion.data.choices[0].message.content
-				} else {
-					console.log('model not specified coorectly')
-					resulttext = defaultText
-				}
+				const completion = await openai.chat.completions.create({
+					messages: [
+						{ role: "system", content: `You are a story writer of intense duels (300 token limit). Write a 4 sentence unique compelling and intense battle between ${interaction.user.username} and ${person.username}.
+						They should both be using unique interesting random weapons, and be in a random location. Nobody should get badly injured, but there should be a winner.` }
+					],
+					model: "gpt-3.5-turbo-0125",
+					frequency_penalty: 0.4,
+					presence_penalty: 0.5,
+					temperature: 1.5,
+					n: 1,
+					max_tokens: 300,
+				});
+				console.log(completion.choices[0].finish_reason)
+				resulttext = completion.choices[0].message.content
 			} catch (error) {
 				if (error.response) {
 					console.log(error.response.status)
