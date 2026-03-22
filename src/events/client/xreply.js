@@ -1,4 +1,5 @@
 const Guild = require('../../schemas/guild')
+const chalk = require('chalk')
 const mongoose = require('mongoose')
 const accepetedX = ['x', 'х', 'ҳ', 'ӽ', 'ᶍ', 'ӿ', 'χ', 'ᕽ', 'ˣ', '×', '╳', '✕', '✖', '⨯', '✗', '✘', '🗴', '🗶', '☒', '🗵', '🗷', '☓', '🞩', '❌', '❎', '⨉', '🗙', '𝄪', 'א', '𝔛', '𝖃', '𝔵', '𝖝', 'ㄨ', 'メ', '乂', '㐅', 'ᚷ', 'ᚸ', 'لا']
 
@@ -24,6 +25,23 @@ module.exports = {
 async function main(userMsg){
 	//check guild settins in database, if false return
 	result = await Guild.findOne({ guildId: userMsg.channel.guild.id}).select({ Xs: 1, _id: 0})
+	if (!result) {
+		guildProfile = await new Guild({
+			_id: mongoose.Types.ObjectId(),
+			guildId: userMsg.channel.guild.id,
+			guildName: userMsg.channel.guild.name,
+			guildIcon: userMsg.channel.guild.iconURL() ? userMsg.channel.guild.iconURL() : "None",
+			Xs: false,
+			Hello: false,
+			ChannelID: "0",
+		})
+		
+		await guildProfile.save().catch(console.error)
+		
+		//send message to server
+		console.log(chalk.blue(`[Database]: Server: '${userMsg.channel.guild.name}' Added to guild DB.`))
+		result = { Xs: false }
+	}
 	XsBool = result.Xs
 	if (!XsBool) return
 	
