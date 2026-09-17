@@ -20,3 +20,20 @@ run commands are<br />
 npm run test  - only registers commands in test server on test token<br />
 npm run all   - registers commands everywhere, but still on test token<br />
 npm run prod  - registers commands everywhere on real token<br />
+
+
+# Setup
+Install dependencies
+
+```sh
+sudo apt install npm
+npm install
+sudo npm install pm2@latest -g
+```
+
+add the config file
+
+start the pm2 job
+```sh
+pm2 start pm.config.js
+```
